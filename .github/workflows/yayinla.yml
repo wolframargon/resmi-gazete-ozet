@@ -1,0 +1,63 @@
+# Bulut gorevinin "claude/..." dalina gonderdigi gunluk ozeti main dalina birlestirir.
+# Bulut oturumlari dogrudan main'e gonderemedigi icin bu ara adim gerekir.
+#
+# Guvenlik: yalnizca ozet dosyalari (ozetler/YYYYMMDD.html) ve index.json degismisse
+# birlestirilir. Dal baska bir dosyaya dokunmussa is hata verir ve hicbir sey yayinlanmaz;
+# boylece otomatik gorev betikleri, talimati ya da bu is akisini degistiremez.
+name: Ozeti yayinla
+
+on:
+  push:
+    branches:
+      - 'claude/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yayinla
+  cancel-in-progress: false
+
+jobs:
+  birlestir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Dali main'e birlestir
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DAL: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          git clone --quiet "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" depo
+          cd depo
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch --quiet origin "refs/heads/${DAL}:refs/remotes/origin/${DAL}"
+
+          durum=0
+          degisen="$(git diff --name-only "origin/main...origin/${DAL}")"
+          if [ -z "${degisen}" ]; then
+            echo "Birlestirilecek degisiklik yok."
+          else
+            echo "Degisen dosyalar:"
+            printf '%s\n' "${degisen}"
+            izinsiz="$(printf '%s\n' "${degisen}" | grep -Ev '^(index\.json|ozetler/[0-9]{8}\.html)$' || true)"
+            if [ -n "${izinsiz}" ]; then
+              echo "::error::Izin verilmeyen dosyalar degismis; birlestirilmedi:"
+              printf '%s\n' "${izinsiz}"
+              durum=1
+            elif git merge --no-edit "origin/${DAL}"; then
+              git push --quiet origin main
+              echo "main dalina birlestirildi."
+            else
+              echo "::error::Birlestirme catismasi; yayinlanmadi."
+              git merge --abort || true
+              durum=1
+            fi
+          fi
+
+          # Dal her durumda silinir; ertesi gunun gonderimi onu yeniden olusturur.
+          # (Silinmezse eski dal, yeni gonderimin reddedilmesine yol acar.)
+          git push --quiet origin --delete "${DAL}" || true
+          exit "${durum}"

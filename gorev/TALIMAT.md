@@ -37,8 +37,13 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
    python3 gorev/yayinla.py <TARIH>
    ```
 
-   Çıktıda `YAYINLANDI` görmelisin. Hata olursa hatayı aynen bildir. Özet doğrudan `main`
-   dalına gönderilir; ayrı bir dal ya da pull request açma.
+   Çıktının son satırı `YAYINLANDI <TARIH> <dal>` olmalı. Betik, oturum bir `claude/...`
+   çalışma dalındaysa özeti o dala gönderir; depodaki otomatik iş akışı bunu birkaç dakika
+   içinde `main` dalına birleştirir. Pull request açma, `main` dalına kendin göndermeye çalışma.
+
+   Son satır `GONDERILEMEDI` ise ve bu oturuma bir `claude/...` çalışma dalı atanmışsa,
+   komutu o dalın adıyla yeniden çalıştır: `python3 gorev/yayinla.py <TARIH> <dal>`.
+   Yine olmazsa hatayı aynen bildir ve bitir.
 
 ## Özet biçimi
 
