@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -18,10 +19,23 @@ UA = "Mozilla/5.0 (X11; Linux x86_64) ResmiGazeteOzet/1.0"
 MADDE = re.compile(r'href\s*=\s*"(\d{8}(?:M\d+)?-\d+(?:-\d+)?\.(?:htm|html|pdf))"', re.I)
 
 
-def indir(url):
-    istek = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(istek, timeout=60) as yanit:
-        return yanit.read()
+def indir(url, deneme=3):
+    """Dosyayi indirir. Gecici ag hatalarinda birkac kez yeniden dener; 404 hemen bildirilir."""
+    son_hata = None
+    for i in range(deneme):
+        try:
+            istek = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(istek, timeout=45) as yanit:
+                return yanit.read()
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                raise
+            son_hata = e
+        except (urllib.error.URLError, OSError) as e:
+            son_hata = e
+        if i < deneme - 1:
+            time.sleep(3 * (i + 1))
+    raise son_hata
 
 
 def coz(bayt):
@@ -93,8 +107,8 @@ def main():
                 txt = os.path.splitext(ad)[0] + ".txt"
                 with open(os.path.join(cikti, txt), "w", encoding="utf-8") as f:
                     f.write(metne_cevir(coz(bayt), taban))
-        except (urllib.error.URLError, OSError):
-            hatalar.append(ad)
+        except (urllib.error.URLError, OSError) as e:
+            hatalar.append("%s (%s)" % (ad, e))
 
     print("HAZIR", cikti)
     print("TARIH", tarih)
