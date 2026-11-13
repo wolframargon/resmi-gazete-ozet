@@ -66,8 +66,9 @@ kullan: h1, h2, h3, p, ul, li, b, i, mark, a, table, tr, th, td.
    varsa burada mutlaka yer ver. Sayı sıradan atama ve ilanlardan ibaretse bunu açıkça
    söyle; önem uydurma.
 4. `<h2>Maddeler</h2>` — fihristteki bölüm sırasıyla, her bölüm için `<h3>`. Her madde için:
-   başlığı fihristteki bağlantısına `<a href>` ile bağla, ardından 1-3 cümleyle ne getirdiğini
-   sade Türkçeyle anlat. Varsa yürürlük tarihini ve kimleri etkilediğini belirt. İlan
+   başlığı fihristteki bağlantısına `<a href>` ile bağla, altına kurum ve yürürlük satırını
+   yaz (aşağıdaki iskelete bak), ardından 1-3 cümleyle ne getirdiğini sade Türkçeyle anlat.
+   Kimleri etkilediğini belirt; varsa geçiş hükmünü ayrı paragrafta ver. İlan
    bölümündeki kalemleri yalnızca başlıklarıyla listele.
 5. `<h2>Yorum</h2>` — bu sayının pratikte ne anlama geldiğine dair kısa, tarafsız bir
    değerlendirme. Bunun yapay zekâ yorumu olduğu, hukuki danışmanlık olmadığı anlaşılmalı.
@@ -94,12 +95,14 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <h3>Yönetmelikler</h3>
 
 <p><a href="MADDENIN_BAGLANTISI">Yeni bir yönetmeliğin başlığı</a></p>
+<p><b>Kurum:</b> Çevre, Şehircilik ve İklim Değişikliği Bakanlığı · <b>Yürürlük:</b> Yayımı tarihinde</p>
 <p>Ne getirdiğini anlatan 1-3 cümle.</p>
 <ul>
 <li><b>Alt başlık:</b> uzun ve önemli düzenlemelerde isteğe bağlı ayrıntı.</li>
 </ul>
 
 <p><a href="MADDENIN_BAGLANTISI">... Yönetmeliğinde Değişiklik Yapılmasına Dair Yönetmelik</a></p>
+<p><b>Kurum:</b> İçişleri Bakanlığı · <b>Yürürlük:</b> 22.12.2026</p>
 <p>Neyin değiştiğini anlatan 1-3 cümle.</p>
 <table>
 <tr><th>Hüküm</th><th>Eski</th><th>Yeni</th></tr>
@@ -108,7 +111,9 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 
 <p><a href="MADDENIN_BAGLANTISI">... Personeli Görevde Yükselme ve Unvan Değişikliği Yönetmeliği</a></p>
 <p><b>Personel mevzuatı</b></p>
+<p><b>Kurum:</b> ... Genel Müdürlüğü · <b>Yürürlük:</b> Yayımı tarihinde</p>
 <p>Ne olduğunu, kimi kapsadığını ve yürürlük tarihini söyleyen 2-3 cümle.</p>
+<p><b>Geçiş hükmü:</b> Geçici maddeyi, intibakı ya da kazanılmış hakları anlatan 1-2 cümle.</p>
 <ul>
 <li><b>Kapsam ve kadrolar:</b> ...</li>
 <li><b>Şartlar:</b> ...</li>
@@ -131,6 +136,22 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 - Her maddenin başlığı tek başına bir paragraftır (`<p><a ...>Başlık</a></p>`); açıklama ayrı
   bir paragrafta gelir. Maddeleri `<li>` içine yazma; liste yalnızca öne çıkanlarda, bir
   maddenin ayrıntılarında ve ilan bölümünde kullanılır.
+- Kurum ve yürürlük satırı: her maddenin başlık paragrafından hemen sonra (varsa
+  `<p><b>Personel mevzuatı</b></p>` satırının altına) tek bir paragraf yaz:
+  `<p><b>Kurum:</b> Kurumun adı · <b>Yürürlük:</b> Yayımı tarihinde</p>`.
+  Uygulama bunu başlığın üstünde rozetlere çevirir.
+  - `Kurum`, düzenlemeyi çıkaran kurumdur (metnin sonundaki yürütme maddesinden ya da
+    fihristteki başlıktan). Metinden anlaşılmıyorsa `Kurum` kısmını yazma; tahmin etme.
+  - `Yürürlük`, düzenleme yayımlandığı gün yürürlüğe giriyorsa tam olarak `Yayımı tarihinde`,
+    ileri ya da geçmiş bir tarihte giriyorsa o tarihtir ve `GG.AA.YYYY` biçiminde yazılır
+    (örneğin `22.12.2026`). Uygulama ileri tarihi vurgular ve takvime eklenebilir yapar.
+    Hükümler farklı tarihlerde yürürlüğe giriyorsa en erken ileri tarihi yaz, ötekileri
+    açıklama paragrafında belirt. Metinde yürürlük maddesi yoksa (atama kararı, ilan vb.)
+    `Yürürlük` kısmını yazma. İkisi de yoksa bu paragrafı hiç yazma.
+- Geçiş hükmü: düzenlemede geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm
+  varsa, açıklama paragrafından hemen sonra ayrı bir paragraf yaz:
+  `<p><b>Geçiş hükmü:</b> 1-2 cümlelik özet</p>`. Uygulama bunu sarı bir uyarı kutusu olarak,
+  ayrıntıları açmaya gerek kalmadan gösterir. Böyle bir hüküm yoksa bu paragrafı yazma.
 - Ayrıntı listesini yalnızca geniş kesimi ilgilendiren uzun düzenlemelerde ve personel
   mevzuatında ekle. Uygulama, açıklama paragrafından sonra gelen listeyi ve tabloyu
   "Ayrıntıları göster" düğmesinin arkasına alır.
@@ -199,21 +220,24 @@ ilişkin yönetmelikler bu kapsamda değildir.
 Böyle bir maddede:
 
 1. Başlık paragrafından hemen sonra şu satırı ekle: `<p><b>Personel mevzuatı</b></p>`.
-   Uygulama bunu bir etikete çevirir ve maddenin ayrıntılarını açık gösterir.
+   Uygulama bunu bir etikete çevirir, maddenin ayrıntılarını açık gösterir ve o gün için
+   özel bir bildirim gönderir. Kurum ve yürürlük satırı bunun altına gelir.
 2. Açıklama paragrafında düzenlemenin ne olduğunu, hangi kurumun hangi personelini
    kapsadığını ve yürürlük tarihini söyle.
-3. Ayrıntı listesinde, metinde karşılığı olan başlıkları doldur:
+3. Geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm varsa açıklama paragrafından
+   sonra `<p><b>Geçiş hükmü:</b> ...</p>` paragrafını yaz; bunu ayrıntı listesinde tekrarlama.
+4. Ayrıntı listesinde, metinde karşılığı olan başlıkları doldur:
    kapsam ve kadrolar · başvuru ve atanma şartları (hizmet süresi, öğrenim, sınav) · sınav
    usulü ve puanlar · süreler (ilan, başvuru, itiraz, atama) · sınavsız ya da istisnai
-   geçişler · geçiş hükümleri ve kazanılmış haklar · yürürlükten kaldırılan düzenleme.
+   geçişler · yürürlükten kaldırılan düzenleme.
    Her satır 1-2 cümle olsun; rakamları, süreleri ve unvanları metindeki haliyle ver.
-4. Eski–yeni karşılaştırma tablosunu ekle. Düzenleme mevcut bir yönetmeliği değiştiriyorsa
+5. Eski–yeni karşılaştırma tablosunu ekle. Düzenleme mevcut bir yönetmeliği değiştiriyorsa
    yukarıdaki kurallar geçerlidir. Tümüyle yeni bir yönetmelik eskisini yürürlükten
    kaldırıyorsa, kaldırılan yönetmeliği `gorev/eski.py` ile getir (yürürlükten kaldırma
    maddesi onun Resmî Gazete tarihini verir) ve uygulamada fark yaratan başlıca noktaları
    satır satır karşılaştır: şartlar, süreler, puanlar, kapsamdaki kadrolar, usul. En fazla
    8 satır; iki metinde aynı kalan hükümleri tabloya koyma.
-5. Öne çıkanlar listesinde bu maddeye yer ver.
+6. Öne çıkanlar listesinde bu maddeye yer ver.
 
 ## Doğruluk
 

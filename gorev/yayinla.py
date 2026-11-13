@@ -23,6 +23,28 @@ def git(*args, check=True, capture=False):
     return subprocess.run(["git", "-C", KOK] + list(args), check=check, capture_output=capture, text=True)
 
 
+def boyut(yol):
+    """Dosyanin depodaki (satir sonlari LF olan) halinin bayt sayisi."""
+    with open(yol, "rb") as f:
+        return len(f.read().replace(b"\r\n", b"\n"))
+
+
+def index_yaz():
+    """index.json: uygulamanin okudugu tarih listesi (en yeni basta) ve her ozetin boyutu.
+
+    Uygulama, telefondaki ozetin boyutu buradakinden farkliysa o gunu yeniden indirir;
+    boylece sonradan duzeltilen ozetler telefonda da guncellenir.
+    """
+    klasor = os.path.join(KOK, "ozetler")
+    tarihler = sorted(
+        (ad[:-5] for ad in os.listdir(klasor) if re.fullmatch(r"\d{8}\.html", ad)),
+        reverse=True,
+    )
+    boyutlar = {t: boyut(os.path.join(klasor, t + ".html")) for t in tarihler}
+    with open(os.path.join(KOK, "index.json"), "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"guncel": tarihler[0], "tarihler": tarihler, "boyutlar": boyutlar}, f, separators=(",", ":"))
+
+
 def main():
     if len(sys.argv) not in (2, 3) or not re.fullmatch(r"\d{8}", sys.argv[1]):
         sys.exit("Kullanim: yayinla.py yyyyMMdd [dal]")
@@ -34,13 +56,7 @@ def main():
     if os.path.getsize(ozet) < 200:
         sys.exit("Ozet dosyasi cok kisa; yayinlanmadi")
 
-    # index.json: uygulamanin okudugu tarih listesi, en yeni basta
-    tarihler = sorted(
-        (ad[:-5] for ad in os.listdir(os.path.join(KOK, "ozetler")) if re.fullmatch(r"\d{8}\.html", ad)),
-        reverse=True,
-    )
-    with open(os.path.join(KOK, "index.json"), "w", encoding="utf-8", newline="\n") as f:
-        json.dump({"guncel": tarihler[0], "tarihler": tarihler}, f, separators=(",", ":"))
+    index_yaz()
 
     git("add", "index.json", "ozetler/" + tarih + ".html")
     # Yeniden denemede (onceki calistirma commit etmis olabilir) ikinci kez commit etme
