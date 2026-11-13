@@ -7,6 +7,7 @@ Kullanim:
 
 Mukerrer sayilarda tarihin sonuna M1, M2 eklenir (ornek: 20201231M1).
 Ciktinin ilk satiri: BULUNAMADI | AG_HATASI | FIHRIST <sayi> | HAZIR <dosya yolu>
+Metnin ekleri varsa (ayri PDF olarak yayimlananlar) onlar da indirilir ve "EK <yol>" satirlariyla bildirilir.
 Indirilen metinler calisma/eski/ klasorune yazilir; depoya gonderilmez.
 """
 import html
@@ -82,18 +83,33 @@ def main():
 
     klasor = os.path.join(ortak.KOK, "calisma", "eski")
     os.makedirs(klasor, exist_ok=True)
+    ekler = []
     if dosya.lower().endswith(".pdf"):
         yol = os.path.join(klasor, dosya)
         with open(yol, "wb") as f:
             f.write(bayt)
     else:
+        sayfa = ortak.coz(bayt)
         yol = os.path.join(klasor, os.path.splitext(dosya)[0] + ".txt")
         with open(yol, "w", encoding="utf-8") as f:
-            f.write(ortak.metne_cevir(ortak.coz(bayt), taban))
+            f.write(ortak.metne_cevir(sayfa, taban))
+        # Maddenin kendi sayfasinda baglantisi olan ekler (ornegin 20140219-6-1.pdf)
+        on_ek = os.path.splitext(dosya)[0].lower() + "-"
+        for ek in dict.fromkeys(ortak.MADDE.findall(sayfa)):
+            if not ek.lower().startswith(on_ek):
+                continue
+            try:
+                ortak.kaydet(taban, klasor, ek)
+            except (urllib.error.URLError, OSError):
+                continue
+            ad = ek if ek.lower().endswith(".pdf") else os.path.splitext(ek)[0] + ".txt"
+            ekler.append(os.path.join(klasor, ad))
 
     print("HAZIR", yol)
     print("BASLIK", baslik)
     print("BOYUT", round(os.path.getsize(yol) / 1024), "KB")
+    for ek in ekler:
+        print("EK", ek)
 
 
 if __name__ == "__main__":

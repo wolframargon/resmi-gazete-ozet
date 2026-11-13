@@ -25,12 +25,18 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
    - `HAZIR <klasör>`: devam et. Çıktıdaki `TARIH` satırı tarihi (yyyyMMdd) verir.
 
 2. `<klasör>/fihrist.txt` dosyasını oku. Bu, günün fihristidir: bölüm başlıkları, madde
-   başlıkları ve her maddenin `[BAGLANTI: ...]` adresi.
+   başlıkları ve her maddenin `[BAGLANTI: ...]` adresi. Çıktıda `MUKERRER` satırı varsa aynı
+   gün mükerrer sayı da çıkmıştır; `fihrist-M1.txt`, `fihrist-M2.txt` dosyalarını da oku
+   (aşağıdaki "Mükerrer sayılar" bölümü).
 
 3. Klasördeki madde dosyalarını oku: `.txt` dosyaları madde metinleridir, `.pdf` dosyaları
    Read aracıyla okunur (uzun PDF'lerde `pages` parametresiyle bölüm bölüm). Bir madde
    `INDIRILEMEDI` satırında geçiyorsa `python3 gorev/indir.py` komutunu bir kez daha çalıştır
    (betik her dosyayı üç kez dener). Yine indirilemezse o maddeyi yalnızca başlığıyla an.
+
+   Çıktıdaki `EK <ek dosyası> <- <madde dosyası> <adres>` satırları, bir maddenin ayrı PDF
+   olarak yayımlanan ekleridir (örneğin `20261112-4-1.pdf`, `20261112-4.htm` maddesinin
+   ekidir). Bunları da Read aracıyla oku ve o maddenin özetine kat (aşağıdaki "Ekler" bölümü).
 
 4. Mevcut bir düzenlemeyi değiştiren maddeler ve personel mevzuatı için aşağıdaki
    "Eski–yeni karşılaştırması" ve "Personel mevzuatı" bölümlerini uygula; gerekiyorsa önceki
@@ -112,6 +118,7 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <p><a href="MADDENIN_BAGLANTISI">... Personeli Görevde Yükselme ve Unvan Değişikliği Yönetmeliği</a></p>
 <p><b>Personel mevzuatı</b></p>
 <p><b>Kurum:</b> ... Genel Müdürlüğü · <b>Yürürlük:</b> Yayımı tarihinde</p>
+<p><b>Ekler:</b> <a href="EK_ADRESI">Ek-1</a></p>
 <p>Ne olduğunu, kimi kapsadığını ve yürürlük tarihini söyleyen 2-3 cümle.</p>
 <p><b>Geçiş hükmü:</b> Geçici maddeyi, intibakı ya da kazanılmış hakları anlatan 1-2 cümle.</p>
 <ul>
@@ -148,6 +155,12 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
     Hükümler farklı tarihlerde yürürlüğe giriyorsa en erken ileri tarihi yaz, ötekileri
     açıklama paragrafında belirt. Metinde yürürlük maddesi yoksa (atama kararı, ilan vb.)
     `Yürürlük` kısmını yazma. İkisi de yoksa bu paragrafı hiç yazma.
+- Ekler satırı: maddenin `EK` satırında bildirilen eki varsa, kurum ve yürürlük satırının
+  hemen altına ayrı bir paragraf yaz:
+  `<p><b>Ekler:</b> <a href="EK_ADRESI">Ek-1</a></p>`. Birden çok ek dosyası varsa
+  bağlantıları virgülle ayır. Bağlantı adresi `EK` satırındaki adrestir; bağlantı metni
+  ekin kısa adıdır (`Ek-1`, `Ek-1 ve Ek-2`, `Ekler`). Uygulama bunu maddenin altında
+  "Ekleri aç" düğmesine çevirir. Eki olmayan maddede bu paragrafı yazma.
 - Geçiş hükmü: düzenlemede geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm
   varsa, açıklama paragrafından hemen sonra ayrı bir paragraf yaz:
   `<p><b>Geçiş hükmü:</b> 1-2 cümlelik özet</p>`. Uygulama bunu sarı bir uyarı kutusu olarak,
@@ -158,6 +171,39 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 - Uyarı ve dipnotları, tamamı italik olan ayrı bir paragraf olarak yaz (`<p><i>...</i></p>`).
 
 Örnek için `ozetler/` klasöründeki önceki günlerin dosyalarına da bakabilirsin.
+
+## Ekler
+
+Yönetmeliklerin ekleri (formlar, cetveller, öğrenim şartı tabloları) çoğu zaman ayrı bir PDF
+olarak yayımlanır ve `indir.py` bunları klasöre indirir. Eki olan maddede:
+
+- Eki Read aracıyla oku. Uzun eklerde önce ilk sayfalara bak (`pages: "1-5"`); ek yalnızca
+  boş form ya da şablondan oluşuyorsa ne olduğunu bir cümleyle söylemek yeter. Tablo ve
+  cetvellerde (kadro, öğrenim şartı, ücret, puan) okuyucuyu ilgilendiren içeriği özetle.
+- Ekin içeriğini açıklama paragrafına ya da ayrıntı listesine `<b>Ekler:</b>` alt başlığıyla
+  kat. Personel mevzuatında eklerdeki şartları (öğrenim, unvan, hizmet süresi) ayrıntı
+  listesine işle.
+- Ek taranmış görüntüyse ve yazısı okunamıyorsa bunu açıkça yaz ("Ek-1 taranmış görüntü
+  olarak yayımlandığı için okunamadı"); içeriğini tahmin etme.
+- İskeletteki `Ekler:` paragrafını ekle.
+
+## Mükerrer sayılar
+
+Aynı gün birden çok Resmî Gazete çıkabilir (1. Mükerrer, 2. Mükerrer...). `indir.py` bunları
+`MUKERRER M1 fihrist-M1.txt <adres>` satırlarıyla bildirir; maddeleri `20261231M1-1.txt`
+gibi adlarla aynı klasöre iner. Hepsi aynı özet dosyasına yazılır:
+
+- `<h1>` asıl sayının başlığıdır. "Günün özeti"nde mükerrer sayıların da çıktığını söyle.
+- "Öne çıkanlar" bütün sayılardan seçilir; mükerrerden gelen maddede bunu belirt.
+- "Maddeler" bölümünde önce asıl sayının grupları gelir. Ardından her mükerrer sayının
+  grupları, başlığın başında sayı belirtilerek yazılır:
+  `<h3>1. Mükerrer Sayı — Kanunlar</h3>`, `<h3>1. Mükerrer Sayı — Yönetmelikler</h3>`.
+  Uygulama tire işaretinden sonrasını grubun adı, öncesini üst başlığı sayar.
+- Mükerrer sayının fihristine giden bağlantıyı "Günün özeti" bölümünün sonunda ayrı bir
+  paragraf olarak ver: `<p><a href="MUKERRER_ADRESI">1. Mükerrer Sayıyı Resmî Gazete'de aç</a></p>`.
+  Adres `MUKERRER` satırındaki adrestir.
+- Kurum ve yürürlük satırı, ekler, karşılaştırma ve personel mevzuatı kuralları mükerrer
+  sayıdaki maddeler için de aynen geçerlidir.
 
 ## Eski–yeni karşılaştırması
 

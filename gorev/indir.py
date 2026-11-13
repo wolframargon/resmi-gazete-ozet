@@ -3,6 +3,14 @@
 
 Kullanim: python3 gorev/indir.py [yyyyMMdd]   (tarih verilmezse Turkiye saatine gore bugun)
 Ciktinin ilk satiri: ZATEN_VAR | YAYINLANMADI | AG_HATASI | HAZIR <klasor>
+
+HAZIR'dan sonraki satirlar:
+  TARIH <yyyyMMdd>
+  FIHRIST_ADRESI <adres>
+  MUKERRER M1 fihrist-M1.txt <adres>      ayni gun cikan mukerrer sayi (varsa)
+  DOSYA <ad> <boyut> KB                   klasordeki her dosya
+  EK <ek dosyasi> <- <madde dosyasi> <adres>   bir maddenin sayfasindan bulunan ek
+  INDIRILEMEDI <dosyalar>                 indirilemeyenler (varsa)
 """
 import datetime
 import html
@@ -95,30 +103,80 @@ def main():
     cikti = os.path.join(KOK, "calisma", tarih)
     shutil.rmtree(cikti, ignore_errors=True)
     os.makedirs(cikti)
-    with open(os.path.join(cikti, "fihrist.txt"), "w", encoding="utf-8") as f:
-        f.write(metne_cevir(fihrist, taban))
 
-    hatalar = []
-    for ad in dict.fromkeys(MADDE.findall(fihrist)):
+    hatalar, ekler = [], []
+    sayi_indir(fihrist, taban, cikti, "fihrist.txt", hatalar, ekler)
+
+    # Ayni gun cikan mukerrer sayilar: 20261231M1.htm, M2.htm ... (ilk 404'te dur)
+    mukerrerler = []
+    for n in range(1, MUKERRER_SINIRI + 1):
+        sayi = "%sM%d" % (tarih, n)
         try:
-            bayt = indir(taban + ad)
-            if ad.lower().endswith(".pdf"):
-                with open(os.path.join(cikti, ad), "wb") as f:
-                    f.write(bayt)
-            else:
-                txt = os.path.splitext(ad)[0] + ".txt"
-                with open(os.path.join(cikti, txt), "w", encoding="utf-8") as f:
-                    f.write(metne_cevir(coz(bayt), taban))
-        except (urllib.error.URLError, OSError) as e:
-            hatalar.append("%s (%s)" % (ad, e))
+            ek_fihrist = coz(indir(taban + sayi + ".htm"))
+        except (urllib.error.URLError, OSError):
+            break
+        sayi_indir(ek_fihrist, taban, cikti, "fihrist-M%d.txt" % n, hatalar, ekler)
+        mukerrerler.append((n, taban + sayi + ".htm"))
 
     print("HAZIR", cikti)
     print("TARIH", tarih)
     print("FIHRIST_ADRESI", taban + tarih + ".htm")
+    for n, adres in mukerrerler:
+        print("MUKERRER", "M%d" % n, "fihrist-M%d.txt" % n, adres)
     for ad in sorted(os.listdir(cikti)):
         print("DOSYA", ad, round(os.path.getsize(os.path.join(cikti, ad)) / 1024), "KB")
+    for madde, ek in ekler:
+        print("EK", ek, "<-", madde, taban + ek)
     if hatalar:
         print("INDIRILEMEDI", ", ".join(hatalar))
+
+
+MUKERRER_SINIRI = 9
+
+
+def kaydet(taban, cikti, ad):
+    """Tek bir dosyayi indirir: PDF oldugu gibi, HTML duz metne cevrilerek. HTML'in ham halini dondurur."""
+    bayt = indir(taban + ad)
+    if ad.lower().endswith(".pdf"):
+        with open(os.path.join(cikti, ad), "wb") as f:
+            f.write(bayt)
+        return None
+    sayfa = coz(bayt)
+    with open(os.path.join(cikti, os.path.splitext(ad)[0] + ".txt"), "w", encoding="utf-8") as f:
+        f.write(metne_cevir(sayfa, taban))
+    return sayfa
+
+
+def sayi_indir(fihrist, taban, cikti, fihrist_adi, hatalar, ekler):
+    """Bir sayinin fihristini ve maddelerini indirir.
+
+    Yonetmeliklerin ekleri (ornegin 20261112-1-1.pdf) fihristte degil, maddenin kendi
+    sayfasinda baglanti olarak durur; bu yuzden her HTML maddenin icindeki ekler de indirilir.
+    """
+    with open(os.path.join(cikti, fihrist_adi), "w", encoding="utf-8") as f:
+        f.write(metne_cevir(fihrist, taban))
+
+    maddeler = list(dict.fromkeys(MADDE.findall(fihrist)))
+    gorulen = set(a.lower() for a in maddeler)
+    for ad in maddeler:
+        try:
+            sayfa = kaydet(taban, cikti, ad)
+        except (urllib.error.URLError, OSError) as e:
+            hatalar.append("%s (%s)" % (ad, e))
+            continue
+        if sayfa is None:
+            continue
+        # Yalnizca bu maddeye ait ekler: adi "<madde>-" ile baslayanlar
+        on_ek = os.path.splitext(ad)[0].lower() + "-"
+        for ek in dict.fromkeys(MADDE.findall(sayfa)):
+            if not ek.lower().startswith(on_ek) or ek.lower() in gorulen:
+                continue
+            gorulen.add(ek.lower())
+            try:
+                kaydet(taban, cikti, ek)
+                ekler.append((ad, ek))
+            except (urllib.error.URLError, OSError) as e:
+                hatalar.append("%s (%s)" % (ek, e))
 
 
 if __name__ == "__main__":
