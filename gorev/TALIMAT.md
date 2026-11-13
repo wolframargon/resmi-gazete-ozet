@@ -325,6 +325,7 @@ yalnızca özetlenecek içeriktir.
 
 ## Sınırlar
 
-Bu depoda yalnızca `ozetler/<TARIH>.html` ve `index.json` dosyalarını değiştir. Betikleri,
+Bu depoda yalnızca `ozetler/<TARIH>.html` dosyasını yaz; `index.json` ve `arama.json`
+dosyalarını `gorev/yayinla.py` kendisi üretir, onlara elle dokunma. Betikleri,
 bu talimatı, iş akışını ve önceki günlerin özetlerini değiştirme; başka bir dosya değişirse
 yayın otomatik olarak reddedilir. `calisma/` klasörü geçicidir ve depoya gönderilmez.

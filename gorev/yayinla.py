@@ -10,6 +10,7 @@ Bulut oturumlari yalnizca "claude/..." dallarina gonderebilir; bu dallara gelen 
 Basarili olursa son satir: YAYINLANDI <tarih> <dal>
 Gonderim reddedilirse son satir: GONDERILEMEDI <dal>
 """
+import html
 import json
 import os
 import re
@@ -29,20 +30,68 @@ def boyut(yol):
         return len(f.read().replace(b"\r\n", b"\n"))
 
 
-def index_yaz():
-    """index.json: uygulamanin okudugu tarih listesi (en yeni basta) ve her ozetin boyutu.
+def kucuk_harf(metin):
+    """Turkce kurallarla kucuk harfe cevirir (I -> ı, İ -> i); uygulamanin aramasiyla ayni olmali."""
+    return metin.replace("I", "ı").replace("İ", "i").lower()
 
-    Uygulama, telefondaki ozetin boyutu buradakinden farkliysa o gunu yeniden indirir;
-    boylece sonradan duzeltilen ozetler telefonda da guncellenir.
+
+def duz_metin(parca):
+    """HTML parcasini aranabilir duz metne cevirir."""
+    t = re.sub(r"(?i)</(p|li|h\d|td|tr)>|<br\s*/?>", " ", parca)
+    t = re.sub(r"(?s)<[^>]+>", "", t)
+    return re.sub(r"\s+", " ", html.unescape(t)).strip()
+
+
+def bolum(ozet, baslik):
+    """Ozetteki bir <h2> bolumunun icerigi (bir sonraki <h2>'ye kadar)."""
+    m = re.search(r"(?is)<h2>\s*" + baslik + r".*?</h2>(.*?)(?=<h2>|\Z)", ozet)
+    return m.group(1) if m else ""
+
+
+def arama_kaydi(ozet):
+    """arama.json icin bir gunun kaydi: sayi, duzenleme sayisi, personel, onizleme ve duz metin."""
+    sayi = re.search(r"(\d{3,6})\s+Sayılı", ozet)
+    maddeler = bolum(ozet, "Maddeler")
+    duzenleme = len(re.findall(r'(?is)<p>\s*<a\s[^>]*href="[^"]+"[^>]*>[^<]+</a>\s*</p>', maddeler))
+    one = bolum(ozet, "Öne çıkanlar")
+    basliklar = [duz_metin(b).rstrip(".:").strip() for b in re.findall(r"(?is)<li>\s*<b>(.*?)</b>", one)]
+    return {
+        "sayi": sayi.group(1) if sayi else "",
+        "duzenleme": duzenleme,
+        "personel": bool(re.search(r"(?i)<b>\s*Personel mevzuatı\s*</b>", ozet)),
+        "onizleme": " · ".join(b for b in basliklar if b),
+        "metin": kucuk_harf(duz_metin(ozet)),
+    }
+
+
+def index_yaz():
+    """index.json ve arama.json dosyalarini yeniden yazar.
+
+    index.json: uygulamanin okudugu tarih listesi (en yeni basta), her ozetin boyutu ve
+    arama.json'un boyutu. Uygulama, telefondaki ozetin boyutu buradakinden farkliysa o gunu
+    yeniden indirir; boylece sonradan duzeltilen ozetler telefonda da guncellenir.
+
+    arama.json: butun gunlerin aranabilir bilgileri. Uygulamanin gecmis paneli, telefona
+    inmemis gunlerde de bu dosya sayesinde indirmeden arama yapar.
     """
     klasor = os.path.join(KOK, "ozetler")
     tarihler = sorted(
         (ad[:-5] for ad in os.listdir(klasor) if re.fullmatch(r"\d{8}\.html", ad)),
         reverse=True,
     )
+    gunler = {}
+    for t in tarihler:
+        with open(os.path.join(klasor, t + ".html"), encoding="utf-8") as f:
+            gunler[t] = arama_kaydi(f.read())
+    arama = os.path.join(KOK, "arama.json")
+    with open(arama, "w", encoding="utf-8", newline="\n") as f:
+        json.dump({"surum": 1, "gunler": gunler}, f, ensure_ascii=False, separators=(",", ":"))
     boyutlar = {t: boyut(os.path.join(klasor, t + ".html")) for t in tarihler}
     with open(os.path.join(KOK, "index.json"), "w", encoding="utf-8", newline="\n") as f:
-        json.dump({"guncel": tarihler[0], "tarihler": tarihler, "boyutlar": boyutlar}, f, separators=(",", ":"))
+        json.dump(
+            {"guncel": tarihler[0], "tarihler": tarihler, "boyutlar": boyutlar, "arama_boyut": boyut(arama)},
+            f, separators=(",", ":"),
+        )
 
 
 def main():
@@ -58,7 +107,7 @@ def main():
 
     index_yaz()
 
-    git("add", "index.json", "ozetler/" + tarih + ".html")
+    git("add", "index.json", "arama.json", "ozetler/" + tarih + ".html")
     # Yeniden denemede (onceki calistirma commit etmis olabilir) ikinci kez commit etme
     if git("diff", "--cached", "--quiet", check=False).returncode != 0:
         kimlik = []

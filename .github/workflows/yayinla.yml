@@ -1,7 +1,7 @@
 # Bulut gorevinin "claude/..." dalina gonderdigi gunluk ozeti main dalina birlestirir.
 # Bulut oturumlari dogrudan main'e gonderemedigi icin bu ara adim gerekir.
 #
-# Guvenlik: yalnizca ozet dosyalari (ozetler/YYYYMMDD.html) ve index.json degismisse
+# Guvenlik: yalnizca ozet dosyalari (ozetler/YYYYMMDD.html), index.json ve arama.json degismisse
 # birlestirilir. Dal baska bir dosyaya dokunmussa is hata verir ve hicbir sey yayinlanmaz;
 # boylece otomatik gorev betikleri, talimati ya da bu is akisini degistiremez.
 name: Ozeti yayinla
@@ -48,7 +48,7 @@ jobs:
           else
             echo "Degisen dosyalar:"
             printf '%s\n' "${degisen}"
-            izinsiz="$(printf '%s\n' "${degisen}" | grep -Ev '^(index\.json|ozetler/[0-9]{8}\.html)$' || true)"
+            izinsiz="$(printf '%s\n' "${degisen}" | grep -Ev '^(index\.json|arama\.json|ozetler/[0-9]{8}\.html)$' || true)"
             if [ -n "${izinsiz}" ]; then
               echo "::error::Izin verilmeyen dosyalar degismis; birlestirilmedi:"
               printf '%s\n' "${izinsiz}"

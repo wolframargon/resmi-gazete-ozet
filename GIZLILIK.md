@@ -1,6 +1,8 @@
 # Özet RG: Gizlilik Politikası / Privacy Policy
 
-Son güncelleme / Last updated: 13 Kasım 2026 / 13 November 2026
+Son güncelleme / Last updated: 14 Kasım 2026 / 14 November 2026
+
+Geliştirici / Developer: Birol ABANUZOĞLU · İletişim / Contact: <birolabanuzoglu@gmail.com>
 
 [Türkçe](#türkçe) · [English](#english)
 
@@ -23,24 +25,34 @@ Uygulama **hiçbir kişisel veri toplamaz, saklamaz ya da paylaşmaz.**
 
 ### İnternet bağlantısı
 
-Uygulama yalnızca günlük özetleri indirmek için GitHub'ın dosya sunucusuna
-(`raw.githubusercontent.com`) bağlanır ve bu bağlantıda hiçbir kişisel bilgi göndermez.
-Her internet bağlantısında olduğu gibi, cihazınızın IP adresi bu sunucu tarafından teknik olarak
-görülebilir; GitHub'ın bu konudaki uygulamaları GitHub Gizlilik Bildirimi'ne tabidir:
+Uygulama iki adrese bağlanır ve bu bağlantılarda hiçbir kişisel bilgi göndermez:
+
+- Günlük özetleri ve arama dizinini indirmek için GitHub'ın dosya sunucusu
+  (`raw.githubusercontent.com`),
+- Yalnızca siz "Tarih Seç" ile özeti olmayan eski bir günü açtığınızda, o günün fihristini
+  almak için Resmî Gazete'nin sitesi (`www.resmigazete.gov.tr`).
+
+Her internet bağlantısında olduğu gibi, cihazınızın IP adresi bu sunucular tarafından teknik
+olarak görülebilir; GitHub'ın bu konudaki uygulamaları GitHub Gizlilik Bildirimi'ne tabidir:
 <https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement>.
-Bir maddenin tam metnini ya da Resmî Gazete'yi açmayı seçtiğinizde bağlantı telefonunuzun
-tarayıcısında açılır.
+Bir maddenin tam metnini, Resmî Gazete'yi, LinkedIn sayfasını ya da "tüm arşivde ara"
+seçeneğini (bir arama motorunda açılır) kullandığınızda bağlantı telefonunuzun tarayıcısında açılır.
 
 ### Cihazda tutulan bilgiler
 
 Aşağıdakiler yalnızca sizin cihazınızda, uygulamanın özel alanında tutulur; hiçbir yere
 gönderilmez ve uygulamayı kaldırdığınızda silinir:
 
-- İndirilen günlük özetler,
+- İndirilen günlük özetler ve arama dizini,
 - "Kaydet" ile işaretlediğiniz maddeler,
+- Tema tercihiniz (Açık / Koyu / Sistem),
 - Geçmiş listesi için kullanılan teknik bilgiler (özetlerin tarihleri ve boyutları).
 
-Uygulama içi aramalar yalnızca cihazdaki özetlerde yapılır ve kaydedilmez.
+Uygulama içi aramalar cihazdaki özetlerde ve indirilmiş arama dizininde yapılır; aradığınız
+sözcükler kaydedilmez ve hiçbir yere gönderilmez ("tüm arşivde ara"yı kendiniz seçmedikçe).
+
+6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında uygulama tarafından işlenen bir
+kişisel veri bulunmamaktadır.
 
 ### İzinler ve cihaz özellikleri
 
@@ -59,7 +71,7 @@ Uygulama çocuklara yönelik değildir ve hiçbir yaştan kullanıcıdan veri to
 ### Değişiklikler ve iletişim
 
 Bu politika değişirse güncel hâli bu sayfada yayınlanır. Sorularınız için:
-<https://github.com/wolframargon/resmi-gazete-ozet/issues>
+<birolabanuzoglu@gmail.com> ya da <https://github.com/wolframargon/resmi-gazete-ozet/issues>
 
 ---
 
@@ -81,24 +93,34 @@ The app **does not collect, store or share any personal data.**
 
 ### Internet connection
 
-The app connects only to GitHub's file server (`raw.githubusercontent.com`) to download the daily
-summaries and sends no personal information in doing so. As with any internet connection, your
-device's IP address is technically visible to that server; GitHub's handling of it is governed by
-the GitHub General Privacy Statement:
+The app connects to two addresses and sends no personal information to either:
+
+- GitHub's file server (`raw.githubusercontent.com`) to download the daily summaries and the
+  search index,
+- Only when you open an older day without a summary via "Tarih Seç" (pick a date), the Official
+  Gazette website (`www.resmigazete.gov.tr`) to fetch that day's table of contents.
+
+As with any internet connection, your device's IP address is technically visible to these
+servers; GitHub's handling of it is governed by the GitHub General Privacy Statement:
 <https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement>.
-When you choose to open the full text of an item or the Official Gazette, the link opens in your
-phone's browser.
+When you choose to open the full text of an item, the Official Gazette, the LinkedIn page or the
+"search the whole archive" option (opens in a search engine), the link opens in your phone's browser.
 
 ### Data kept on the device
 
 The following are kept only on your device, in the app's private storage; they are never sent
 anywhere and are deleted when you uninstall the app:
 
-- Downloaded daily summaries,
+- Downloaded daily summaries and the search index,
 - Items you mark with "Kaydet" (save),
+- Your theme choice (Light / Dark / System),
 - Technical data used for the history list (dates and sizes of the summaries).
 
-In-app searches run only over the summaries on the device and are not stored.
+In-app searches run over the summaries and the downloaded search index on the device; search
+terms are not stored or sent anywhere (unless you choose "search the whole archive" yourself).
+
+No personal data is processed by the app within the meaning of the Turkish Personal Data
+Protection Law No. 6698 (KVKK).
 
 ### Permissions and device features
 
@@ -117,4 +139,4 @@ The app is not directed at children and collects no data from users of any age.
 ### Changes and contact
 
 If this policy changes, the current version will be published on this page. Questions:
-<https://github.com/wolframargon/resmi-gazete-ozet/issues>
+<birolabanuzoglu@gmail.com> or <https://github.com/wolframargon/resmi-gazete-ozet/issues>
