@@ -149,6 +149,8 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <ul>
 <li><b>Kapsam ve kadrolar:</b> ...</li>
 <li><b>Şartlar:</b> ...</li>
+<li><b>Soru – Okuyucunun en çok merak edeceği kısa soru?</b> 1-2 cümlelik net cevap.</li>
+<li><b>Soru – İkinci kritik soru?</b> 1-2 cümlelik net cevap.</li>
 </ul>
 <table>
 <tr><th>Hüküm</th><th>Eski</th><th>Yeni</th></tr>
@@ -198,6 +200,10 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 - Ayrıntı listesini yalnızca geniş kesimi ilgilendiren uzun düzenlemelerde ve personel
   mevzuatında ekle. Uygulama, açıklama paragrafından sonra gelen listeyi ve tabloyu
   "Ayrıntıları göster" düğmesinin arkasına alır.
+- Sıkça sorulanlar: personel mevzuatında ve geniş kesimi ilgilendiren önemli yönetmeliklerde
+  ayrıntı listesinin (`<ul>`) sonuna, okuyucunun en çok merak edeceği 2 kritik soruyu ve kısa
+  cevabını `<li><b>Soru – Kısa soru?</b> Net cevap.</li>` biçiminde ekle (aşağıdaki
+  "Sıkça sorulanlar" bölümü).
 - Uyarı ve dipnotları, tamamı italik olan ayrı bir paragraf olarak yaz (`<p><i>...</i></p>`).
 
 Örnek için `ozetler/` klasöründeki önceki günlerin dosyalarına da bakabilirsin.
@@ -307,6 +313,7 @@ Böyle bir maddede:
    usulü ve puanlar · süreler (ilan, başvuru, itiraz, atama) · sınavsız ya da istisnai
    geçişler · yürürlükten kaldırılan düzenleme.
    Her satır 1-2 cümle olsun; rakamları, süreleri ve unvanları metindeki haliyle ver.
+   Listenin sonuna "Sıkça sorulanlar" bölümündeki 2 soru-cevap satırını ekle.
 5. Eski–yeni karşılaştırma tablosunu ekle. Düzenleme mevcut bir yönetmeliği değiştiriyorsa
    yukarıdaki kurallar geçerlidir. Tümüyle yeni bir yönetmelik eskisini yürürlükten
    kaldırıyorsa, kaldırılan yönetmeliği `gorev/eski.py` ile getir (yürürlükten kaldırma
@@ -314,6 +321,28 @@ Böyle bir maddede:
    satır satır karşılaştır: şartlar, süreler, puanlar, kapsamdaki kadrolar, usul. En fazla
    8 satır; iki metinde aynı kalan hükümleri tabloya koyma.
 6. Öne çıkanlar listesinde bu maddeye yer ver.
+
+## Sıkça sorulanlar
+
+Personel mevzuatında ve geniş kesimi ilgilendiren önemli yönetmeliklerde (ayrıntı listesi
+yazılan maddelerde), ayrıntı listesinin (`<ul>`) sonuna okuyucunun en çok merak edeceği 2 kritik
+soruyu ve kısa cevabını ekle:
+
+```html
+<li><b>Soru – Kısa soru?</b> Net cevap.</li>
+```
+
+- Soru, uygulamada karşılaşılacak somut bir durumu sorsun: kimler başvurabilir, hangi tarihten
+  itibaren uygulanır, mevcut personelin ya da kurumların hakları ne olur, süre ne zaman dolar
+  gibi. Kısa olsun (en çok 12 kelime) ve soru işaretiyle bitsin.
+- Cevap 1-2 cümle olsun ve yalnızca okuduğun metne dayansın; rakamları, süreleri ve tarihleri
+  metindeki haliyle ver. Metin bir soruyu cevaplamaya yetmiyorsa o soruyu sorma, başka bir soru
+  seç; cevap uydurma.
+- Satır tam olarak `<b>Soru – ` ile başlar; soru kalın, cevap kalın kısmın dışındadır. Uygulama
+  bu satırları ayrıntıların sonunda "Sıkça sorulanlar" başlığıyla soru-cevap kutuları olarak
+  gösterir.
+- Aynı bilgiyi açıklama paragrafında ya da geçiş hükmünde zaten verdiysen soruyu ondan farklı,
+  tamamlayıcı bir noktaya yönelt.
 
 ## Doğruluk
 

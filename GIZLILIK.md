@@ -1,6 +1,6 @@
 # Özet RG: Gizlilik Politikası / Privacy Policy
 
-Son güncelleme / Last updated: 14 Kasım 2026 / 14 November 2026
+Son güncelleme / Last updated: 13 Kasım 2026 / 13 November 2026
 
 Geliştirici / Developer: Birol ABANUZOĞLU · İletişim / Contact: <birolabanuzoglu@gmail.com>
 
@@ -35,8 +35,9 @@ Uygulama iki adrese bağlanır ve bu bağlantılarda hiçbir kişisel bilgi gön
 Her internet bağlantısında olduğu gibi, cihazınızın IP adresi bu sunucular tarafından teknik
 olarak görülebilir; GitHub'ın bu konudaki uygulamaları GitHub Gizlilik Bildirimi'ne tabidir:
 <https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement>.
-Bir maddenin tam metnini, Resmî Gazete'yi, LinkedIn sayfasını ya da "tüm arşivde ara"
-seçeneğini (bir arama motorunda açılır) kullandığınızda bağlantı telefonunuzun tarayıcısında açılır.
+Bir maddenin tam metnini, Resmî Gazete'yi, LinkedIn sayfasını, "tüm arşivde ara" seçeneğini
+(bir arama motorunda açılır) ya da "ChatGPT'de Aç" düğmesini kullandığınızda bağlantı
+telefonunuzun tarayıcısında (ya da ilgili uygulamada) açılır.
 
 ### Cihazda tutulan bilgiler
 
@@ -63,6 +64,13 @@ kişisel veri bulunmamaktadır.
 - **Takvime ekleme ve paylaşma:** Yalnızca siz dokunduğunuzda, telefonunuzun takvim ya da
   paylaşım ekranı açılır. Uygulama takviminizi okumaz; paylaşımı siz seçtiğiniz uygulamayla
   yaparsınız.
+- **AI'ya Sor:** Yalnızca siz bir soru seçip ya da yazıp düğmeye dokunduğunuzda, sorunuz ve
+  ilgili maddenin (ya da günün) özeti tek bir metin olarak panoya kopyalanır ve sizin
+  seçtiğiniz yerde açılır: "ChatGPT'de Aç" bu metni `chatgpt.com` adresinde (tarayıcıda ya da
+  ChatGPT uygulamasında), "Diğer AI / Paylaş" ise telefonunuzun paylaşım ekranında seçtiğiniz
+  uygulamada (ör. Gemini, Claude, Copilot) açar. Bu metin, seçtiğiniz yapay zekâ hizmetinin
+  koşullarına ve gizlilik politikasına tabidir. Uygulama sorunuzu saklamaz ve kendisi hiçbir
+  yere göndermez. Sorulara ad, T.C. kimlik numarası gibi kişisel bilgiler yazmamanızı öneririz.
 
 ### Çocuklar
 
@@ -103,8 +111,9 @@ The app connects to two addresses and sends no personal information to either:
 As with any internet connection, your device's IP address is technically visible to these
 servers; GitHub's handling of it is governed by the GitHub General Privacy Statement:
 <https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement>.
-When you choose to open the full text of an item, the Official Gazette, the LinkedIn page or the
-"search the whole archive" option (opens in a search engine), the link opens in your phone's browser.
+When you choose to open the full text of an item, the Official Gazette, the LinkedIn page, the
+"search the whole archive" option (opens in a search engine) or the "ChatGPT'de Aç" (open in
+ChatGPT) button, the link opens in your phone's browser (or in the related app).
 
 ### Data kept on the device
 
@@ -131,6 +140,13 @@ Protection Law No. 6698 (KVKK).
   (e.g. Google, Samsung); the app sends it nowhere else.
 - **Add to calendar and share:** only when you tap them, your phone's calendar or share sheet
   opens. The app does not read your calendar; you share with the app you choose.
+- **AI'ya Sor (ask AI):** only when you pick or type a question and tap a button, your question
+  and the summary of the related item (or day) are copied to the clipboard as one text and
+  opened where you choose: "ChatGPT'de Aç" opens it at `chatgpt.com` (in the browser or the
+  ChatGPT app), "Diğer AI / Paylaş" opens your phone's share sheet so you can pick an app
+  (e.g. Gemini, Claude, Copilot). That text is subject to the terms and privacy policy of the AI
+  service you choose. The app does not store your question and sends it nowhere by itself. We
+  recommend not entering personal data such as your name or national ID number in questions.
 
 ### Children
 
