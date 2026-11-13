@@ -88,6 +88,9 @@ def main():
         yol = os.path.join(klasor, dosya)
         with open(yol, "wb") as f:
             f.write(bayt)
+        metin = ortak.pdf_metni(yol)  # buyuk PDF'ler icin duz metin kopyasi (cikarilabiliyorsa)
+        if metin:
+            ekler.append(metin)
     else:
         sayfa = ortak.coz(bayt)
         yol = os.path.join(klasor, os.path.splitext(dosya)[0] + ".txt")

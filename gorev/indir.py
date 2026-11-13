@@ -11,12 +11,18 @@ HAZIR'dan sonraki satirlar:
   DOSYA <ad> <boyut> KB                   klasordeki her dosya
   EK <ek dosyasi> <- <madde dosyasi> <adres>   bir maddenin sayfasindan bulunan ek
   INDIRILEMEDI <dosyalar>                 indirilemeyenler (varsa)
+  GUNCELLE ozetler/<tarih>.html M<n>      ozet zaten var ama sonradan mukerrer sayi cikti:
+                                          yeni ozet yazilmaz, mevcut ozet guncellenir
+  YENIDEN_CALISTIR python3 gorev/indir.py <bugun>   dunun ozeti guncellendikten sonra bugune gec
+
+Her PDF'in metni, cikarilabiliyorsa, yanina <ad>.pdf.txt olarak yazilir (buyuk PDF'ler icin).
 """
 import datetime
 import html
 import os
 import re
 import shutil
+import subprocess
 import sys
 import time
 import urllib.error
@@ -83,11 +89,22 @@ def main():
     if not re.fullmatch(r"\d{8}", tarih):
         sys.exit("Tarih yyyyMMdd biciminde olmali")
 
-    if os.path.exists(os.path.join(KOK, "ozetler", tarih + ".html")):
-        print("ZATEN_VAR", tarih)
-        return
+    # Tarih verilmeden calistirildiysa (gunluk rutin) once dunun ozetine bak: ozet yayinlandiktan
+    # sonra mukerrer sayi cikmis olabilir. Ciktiysa once dun guncellenir, sonra bugune gecilir.
+    bugun = None
+    if len(sys.argv) == 1:
+        dun = (datetime.datetime.strptime(tarih, "%Y%m%d") - datetime.timedelta(days=1)).strftime("%Y%m%d")
+        if yeni_mukerrer(dun):
+            bugun, tarih = tarih, dun
 
-    taban = "https://www.resmigazete.gov.tr/eskiler/%s/%s/" % (tarih[:4], tarih[4:6])
+    guncelle = 0
+    if os.path.exists(os.path.join(KOK, "ozetler", tarih + ".html")):
+        guncelle = yeni_mukerrer(tarih)
+        if not guncelle:
+            print("ZATEN_VAR", tarih)
+            return
+
+    taban = taban_adresi(tarih)
     try:
         fihrist = coz(indir(taban + tarih + ".htm"))
     except urllib.error.HTTPError as e:
@@ -129,17 +146,83 @@ def main():
         print("EK", ek, "<-", madde, taban + ek)
     if hatalar:
         print("INDIRILEMEDI", ", ".join(hatalar))
+    if guncelle:
+        print("GUNCELLE", "ozetler/%s.html" % tarih, "M%d" % guncelle)
+    if bugun:
+        print("YENIDEN_CALISTIR", "python3 gorev/indir.py", bugun)
 
 
 MUKERRER_SINIRI = 9
+PDF_METIN_ALT_SINIRI = 200  # bundan kisa cikan metin, taranmis goruntu sayilir ve yazilmaz
+
+
+def taban_adresi(tarih):
+    return "https://www.resmigazete.gov.tr/eskiler/%s/%s/" % (tarih[:4], tarih[4:6])
+
+
+def yeni_mukerrer(tarih):
+    """Ozeti yayinlanmis bir gun icin, ozette henuz yer almayan bir mukerrer sayi ciktiysa numarasini dondurur.
+
+    Ozetteki "N. Mükerrer Sayı" ibarelerinin en buyugu islenmis sayilir; bir sonraki
+    mukerrerin fihristi sitede varsa o numara dondurulur. Ozet yoksa ya da yeni mukerrer
+    yoksa 0 doner. Ag hatasi, mukerrer yok sayilir.
+    """
+    yol = os.path.join(KOK, "ozetler", tarih + ".html")
+    if not os.path.exists(yol):
+        return 0
+    with open(yol, encoding="utf-8") as f:
+        ozet = f.read()
+    islenen = max([int(n) for n in re.findall(r"(\d+)\.\s*Mükerrer", ozet)] or [0])
+    sonraki = islenen + 1
+    if sonraki > MUKERRER_SINIRI:
+        return 0
+    try:
+        indir("%s%sM%d.htm" % (taban_adresi(tarih), tarih, sonraki), deneme=1)
+    except (urllib.error.URLError, OSError):
+        return 0
+    return sonraki
+
+
+def pdf_metni(yol):
+    """PDF'in metnini <ad>.pdf.txt dosyasina cikarir; buyuk PDF'ler bu sayede okunabilir.
+
+    Sistemde pdftotext komutu ya da pypdf modulu varsa kullanilir; ikisi de yoksa ya da PDF
+    taranmis goruntuyse (metin cikmiyorsa) dosya yazilmaz. Yazilan dosyanin yolunu dondurur.
+    """
+    hedef = yol + ".txt"
+    metin = ""
+    komut = shutil.which("pdftotext")
+    if komut:
+        try:
+            subprocess.run([komut, "-layout", "-enc", "UTF-8", yol, hedef], check=True, timeout=180,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            with open(hedef, encoding="utf-8", errors="replace") as f:
+                metin = f.read()
+        except (OSError, subprocess.SubprocessError):
+            metin = ""
+    if not metin.strip():
+        try:
+            from pypdf import PdfReader  # yoksa ImportError
+            metin = "\n\n".join((sayfa.extract_text() or "") for sayfa in PdfReader(yol).pages)
+        except Exception:  # modul yok ya da PDF okunamadi
+            metin = ""
+    if len(metin.strip()) < PDF_METIN_ALT_SINIRI:
+        if os.path.exists(hedef):
+            os.remove(hedef)
+        return None
+    with open(hedef, "w", encoding="utf-8") as f:
+        f.write(metin)
+    return hedef
 
 
 def kaydet(taban, cikti, ad):
     """Tek bir dosyayi indirir: PDF oldugu gibi, HTML duz metne cevrilerek. HTML'in ham halini dondurur."""
     bayt = indir(taban + ad)
     if ad.lower().endswith(".pdf"):
-        with open(os.path.join(cikti, ad), "wb") as f:
+        yol = os.path.join(cikti, ad)
+        with open(yol, "wb") as f:
             f.write(bayt)
+        pdf_metni(yol)
         return None
     sayfa = coz(bayt)
     with open(os.path.join(cikti, os.path.splitext(ad)[0] + ".txt"), "w", encoding="utf-8") as f:

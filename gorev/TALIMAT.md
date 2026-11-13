@@ -24,6 +24,18 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
      başka bir kaynaktan ya da hafızandan üretmeye çalışma.
    - `HAZIR <klasör>`: devam et. Çıktıdaki `TARIH` satırı tarihi (yyyyMMdd) verir.
 
+   İki özel durum (ikisi de seyrektir; çıktıda bu satırlar yoksa bu paragrafı atla):
+   - Çıktıda `GUNCELLE ozetler/<TARIH>.html M<n>` satırı varsa o günün özeti daha önce
+     yayınlanmış, ama sonradan mükerrer sayı çıkmıştır. Yeni özet yazma: mevcut dosyayı oku,
+     asıl sayıya ilişkin bölümleri olduğu gibi bırak ve yalnızca mükerrer sayının maddelerini
+     aşağıdaki "Mükerrer sayılar" bölümüne göre ekle ("Günün özeti"ne bir cümle ve fihrist
+     bağlantısı, gerekiyorsa "Öne çıkanlar"a bir satır, "Maddeler"e yeni gruplar). Grup
+     başlığında `<n>. Mükerrer Sayı` ibaresi mutlaka geçsin; betik mükerrerin işlendiğini
+     bundan anlar. Sonra 6. adımdaki gibi o tarihle yayınla.
+   - Çıktıda `YENIDEN_CALISTIR python3 gorev/indir.py <bugün>` satırı varsa betik önce dünün
+     özetini güncelletmiştir. Dünü yayınladıktan sonra o komutu aynen çalıştır ve bugünün
+     sayısı için adımları baştan uygula.
+
 2. `<klasör>/fihrist.txt` dosyasını oku. Bu, günün fihristidir: bölüm başlıkları, madde
    başlıkları ve her maddenin `[BAGLANTI: ...]` adresi. Çıktıda `MUKERRER` satırı varsa aynı
    gün mükerrer sayı da çıkmıştır; `fihrist-M1.txt`, `fihrist-M2.txt` dosyalarını da oku
@@ -33,6 +45,11 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
    Read aracıyla okunur (uzun PDF'lerde `pages` parametresiyle bölüm bölüm). Bir madde
    `INDIRILEMEDI` satırında geçiyorsa `python3 gorev/indir.py` komutunu bir kez daha çalıştır
    (betik her dosyayı üç kez dener). Yine indirilemezse o maddeyi yalnızca başlığıyla an.
+
+   Betik, metni çıkarılabilen her PDF'in yanına düz metin kopyasını da yazar
+   (`20261113-1-1.pdf` için `20261113-1-1.pdf.txt`). Bir PDF çok büyükse ya da Read aracıyla
+   okunamıyorsa bu `.pdf.txt` dosyasını oku. Böyle bir dosya yoksa PDF taranmış görüntüdür;
+   Read aracıyla sayfa sayfa (`pages: "1-5"`) okumayı dene, o da olmazsa okunamadığını yaz.
 
    Çıktıdaki `EK <ek dosyası> <- <madde dosyası> <adres>` satırları, bir maddenin ayrı PDF
    olarak yayımlanan ekleridir (örneğin `20261112-4-1.pdf`, `20261112-4.htm` maddesinin
@@ -149,6 +166,10 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
   Uygulama bunu başlığın üstünde rozetlere çevirir.
   - `Kurum`, düzenlemeyi çıkaran kurumdur (metnin sonundaki yürütme maddesinden ya da
     fihristteki başlıktan). Metinden anlaşılmıyorsa `Kurum` kısmını yazma; tahmin etme.
+    Rozet tek satıra sığmalıdır: adı öz yaz ("T.C." ve "Başkanlığı/Müdürlüğü" gibi ekleri
+    gerekmedikçe yazma). Ad 30 karakteri geçiyorsa ve yerleşik bir resmî kısaltması varsa
+    kısaltmayı yaz (SEDDK, BDDK, AFAD, DSİ, EPDK, BTK, SPK, SGK, TÜİK, YÖK, KVKK, TCMB gibi);
+    kısaltma uydurma. Kurumun tam adı açıklama paragrafında zaten geçer.
   - `Yürürlük`, düzenleme yayımlandığı gün yürürlüğe giriyorsa tam olarak `Yayımı tarihinde`,
     ileri ya da geçmiş bir tarihte giriyorsa o tarihtir ve `GG.AA.YYYY` biçiminde yazılır
     (örneğin `22.12.2026`). Uygulama ileri tarihi vurgular ve takvime eklenebilir yapar.
@@ -159,8 +180,9 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
   hemen altına ayrı bir paragraf yaz:
   `<p><b>Ekler:</b> <a href="EK_ADRESI">Ek-1</a></p>`. Birden çok ek dosyası varsa
   bağlantıları virgülle ayır. Bağlantı adresi `EK` satırındaki adrestir; bağlantı metni
-  ekin kısa adıdır (`Ek-1`, `Ek-1 ve Ek-2`, `Ekler`). Uygulama bunu maddenin altında
-  "Ekleri aç" düğmesine çevirir. Eki olmayan maddede bu paragrafı yazma.
+  ekin kısa adıdır (`Ek-1`, `Ek-1 ve Ek-2`, `Ek-1 – Ek-9`, `Ekler`); en çok 15 karakter
+  olsun, çünkü uygulama bu metni "Ayrıntıları göster" düğmesinin yanında küçük bir düğme
+  olarak gösterir. Eki olmayan maddede bu paragrafı yazma.
 - Geçiş hükmü: düzenlemede geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm
   varsa, açıklama paragrafından hemen sonra ayrı bir paragraf yaz:
   `<p><b>Geçiş hükmü:</b> 1-2 cümlelik özet</p>`. Uygulama bunu sarı bir uyarı kutusu olarak,
