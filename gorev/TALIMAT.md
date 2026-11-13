@@ -24,7 +24,11 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
      başka bir kaynaktan ya da hafızandan üretmeye çalışma.
    - `HAZIR <klasör>`: devam et. Çıktıdaki `TARIH` satırı tarihi (yyyyMMdd) verir.
 
-   İki özel durum (ikisi de seyrektir; çıktıda bu satırlar yoksa bu paragrafı atla):
+   Üç özel durum (hepsi seyrektir; çıktıda bu satırlar yoksa bu paragrafı atla):
+   - Çıktıda `KACIRILAN <TARIH>` satırı varsa dünün sayısı özetlenmemiş (sayı rutinden sonra
+     yayımlanmış ya da rutin çalışmamış). `TARIH` dünün tarihidir; o gün için olağan şekilde,
+     aşağıdaki bütün adımlarla yeni bir özet yaz ve yayınla. Özette sayının geç
+     özetlendiğini belirtmene gerek yok.
    - Çıktıda `GUNCELLE ozetler/<TARIH>.html M<n>` satırı varsa o günün özeti daha önce
      yayınlanmış, ama sonradan mükerrer sayı çıkmıştır. Yeni özet yazma: mevcut dosyayı oku,
      asıl sayıya ilişkin bölümleri olduğu gibi bırak ve yalnızca mükerrer sayının maddelerini
@@ -32,9 +36,10 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
      bağlantısı, gerekiyorsa "Öne çıkanlar"a bir satır, "Maddeler"e yeni gruplar). Grup
      başlığında `<n>. Mükerrer Sayı` ibaresi mutlaka geçsin; betik mükerrerin işlendiğini
      bundan anlar. Sonra 6. adımdaki gibi o tarihle yayınla.
-   - Çıktıda `YENIDEN_CALISTIR python3 gorev/indir.py <bugün>` satırı varsa betik önce dünün
-     özetini güncelletmiştir. Dünü yayınladıktan sonra o komutu aynen çalıştır ve bugünün
-     sayısı için adımları baştan uygula.
+   - Çıktıda `YENIDEN_CALISTIR python3 gorev/indir.py <bugün>` satırı varsa betik önce dünü
+     hazırlamıştır (`KACIRILAN` ya da `GUNCELLE` ile birlikte gelir). Dünü yayınladıktan sonra
+     o komutu aynen çalıştır ve bugünün sayısı için adımları baştan uygula. İki yayın aynı
+     çalışma dalına gider; depodaki iş akışı ikisini de sırayla birleştirir.
 
 2. `<klasör>/fihrist.txt` dosyasını oku. Bu, günün fihristidir: bölüm başlıkları, madde
    başlıkları ve her maddenin `[BAGLANTI: ...]` adresi. Çıktıda `MUKERRER` satırı varsa aynı
@@ -49,7 +54,10 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
    Betik, metni çıkarılabilen her PDF'in yanına düz metin kopyasını da yazar
    (`20261113-1-1.pdf` için `20261113-1-1.pdf.txt`). Bir PDF çok büyükse ya da Read aracıyla
    okunamıyorsa bu `.pdf.txt` dosyasını oku. Böyle bir dosya yoksa PDF taranmış görüntüdür;
-   Read aracıyla sayfa sayfa (`pages: "1-5"`) okumayı dene, o da olmazsa okunamadığını yaz.
+   Read aracıyla sayfa sayfa (`pages: "1-5"`) okumayı dene. 10 MB'tan büyük taranmış PDF'lerin
+   ilk 8 sayfası betik tarafından ayrıca `<ad>-ilk8.pdf` olarak kaydedilir (örneğin
+   `20261113-1-1-ilk8.pdf`); asıl dosya okunamazsa bunu oku ve özette yalnızca ilk sayfaların
+   incelendiğini belirt. Hiçbiri okunamazsa okunamadığını yaz.
 
    Çıktıdaki `EK <ek dosyası> <- <madde dosyası> <adres>` satırları, bir maddenin ayrı PDF
    olarak yayımlanan ekleridir (örneğin `20261112-4-1.pdf`, `20261112-4.htm` maddesinin

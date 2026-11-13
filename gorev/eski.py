@@ -91,6 +91,10 @@ def main():
         metin = ortak.pdf_metni(yol)  # buyuk PDF'ler icin duz metin kopyasi (cikarilabiliyorsa)
         if metin:
             ekler.append(metin)
+        elif len(bayt) > ortak.BUYUK_PDF:
+            ilk = ortak.pdf_ilk_sayfalar(yol)  # taranmis buyuk PDF: ilk sayfalar ayri dosyada
+            if ilk:
+                ekler.append(ilk)
     else:
         sayfa = ortak.coz(bayt)
         yol = os.path.join(klasor, os.path.splitext(dosya)[0] + ".txt")

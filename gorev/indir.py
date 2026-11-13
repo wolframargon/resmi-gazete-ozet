@@ -13,9 +13,12 @@ HAZIR'dan sonraki satirlar:
   INDIRILEMEDI <dosyalar>                 indirilemeyenler (varsa)
   GUNCELLE ozetler/<tarih>.html M<n>      ozet zaten var ama sonradan mukerrer sayi cikti:
                                           yeni ozet yazilmaz, mevcut ozet guncellenir
-  YENIDEN_CALISTIR python3 gorev/indir.py <bugun>   dunun ozeti guncellendikten sonra bugune gec
+  KACIRILAN <tarih>                       dunun ozeti hic yazilmamis; once dun ozetlenir
+  YENIDEN_CALISTIR python3 gorev/indir.py <bugun>   dun bittikten sonra bugune gec
 
 Her PDF'in metni, cikarilabiliyorsa, yanina <ad>.pdf.txt olarak yazilir (buyuk PDF'ler icin).
+Metni cikmayan (taranmis) ve 10 MB'tan buyuk PDF'lerin ilk 8 sayfasi <ad>-ilk8.pdf olarak
+ayrica kaydedilir (pypdf, qpdf ya da mutool varsa).
 """
 import datetime
 import html
@@ -89,13 +92,20 @@ def main():
     if not re.fullmatch(r"\d{8}", tarih):
         sys.exit("Tarih yyyyMMdd biciminde olmali")
 
-    # Tarih verilmeden calistirildiysa (gunluk rutin) once dunun ozetine bak: ozet yayinlandiktan
-    # sonra mukerrer sayi cikmis olabilir. Ciktiysa once dun guncellenir, sonra bugune gecilir.
+    # Tarih verilmeden calistirildiysa (gunluk rutin) once dune bakilir:
+    # - dunun ozeti hic yazilmamissa (sayi rutinden sonra yayimlandi, rutin calismadi...) ve sayi
+    #   sitede yayindaysa once dun ozetlenir;
+    # - dunun ozeti varsa ama ozet yayinlandiktan sonra mukerrer sayi ciktiysa once dun guncellenir.
+    # Ikisinde de ciktinin sonundaki YENIDEN_CALISTIR satiri bugune gecilmesini soyler.
     bugun = None
+    kacirilan = False
     if len(sys.argv) == 1:
         dun = (datetime.datetime.strptime(tarih, "%Y%m%d") - datetime.timedelta(days=1)).strftime("%Y%m%d")
-        if yeni_mukerrer(dun):
-            bugun, tarih = tarih, dun
+        if os.path.exists(os.path.join(KOK, "ozetler", dun + ".html")):
+            if yeni_mukerrer(dun):
+                bugun, tarih = tarih, dun
+        elif yayinda(dun):
+            bugun, tarih, kacirilan = tarih, dun, True
 
     guncelle = 0
     if os.path.exists(os.path.join(KOK, "ozetler", tarih + ".html")):
@@ -138,6 +148,8 @@ def main():
     print("HAZIR", cikti)
     print("TARIH", tarih)
     print("FIHRIST_ADRESI", taban + tarih + ".htm")
+    if kacirilan:
+        print("KACIRILAN", tarih)
     for n, adres in mukerrerler:
         print("MUKERRER", "M%d" % n, "fihrist-M%d.txt" % n, adres)
     for ad in sorted(os.listdir(cikti)):
@@ -158,6 +170,15 @@ PDF_METIN_ALT_SINIRI = 200  # bundan kisa cikan metin, taranmis goruntu sayilir 
 
 def taban_adresi(tarih):
     return "https://www.resmigazete.gov.tr/eskiler/%s/%s/" % (tarih[:4], tarih[4:6])
+
+
+def yayinda(tarih):
+    """O gunun sayisi sitede yayindaysa True. Ag hatasi, yayinda degil sayilir."""
+    try:
+        indir("%s%s.htm" % (taban_adresi(tarih), tarih), deneme=2)
+        return True
+    except (urllib.error.URLError, OSError):
+        return False
 
 
 def yeni_mukerrer(tarih):
@@ -215,6 +236,43 @@ def pdf_metni(yol):
     return hedef
 
 
+BUYUK_PDF = 10 * 1024 * 1024  # bundan buyuk taranmis PDF'ler okuma aracina sigmayabilir
+ILK_SAYFA = 8
+
+
+def pdf_ilk_sayfalar(yol):
+    """Buyuk, taranmis bir PDF'in ilk 8 sayfasini <ad>-ilk8.pdf olarak ayri kaydeder.
+
+    Boylece model hic degilse ilk sayfalardaki tablolari Read araciyla okuyabilir. Sirayla
+    pypdf modulu, qpdf ve mutool komutlari denenir; hicbiri yoksa ya da basarisizsa None doner.
+    """
+    hedef = os.path.splitext(yol)[0] + "-ilk%d.pdf" % ILK_SAYFA
+    try:
+        from pypdf import PdfReader, PdfWriter  # yoksa ImportError
+        okuyucu = PdfReader(yol)
+        yazici = PdfWriter()
+        for sayfa in okuyucu.pages[:ILK_SAYFA]:
+            yazici.add_page(sayfa)
+        with open(hedef, "wb") as f:
+            yazici.write(f)
+        return hedef
+    except Exception:  # modul yok ya da PDF okunamadi; komut satiri araclarina gec
+        pass
+    komutlar = []
+    if shutil.which("qpdf"):
+        komutlar.append([shutil.which("qpdf"), yol, "--pages", ".", "1-%d" % ILK_SAYFA, "--", hedef])
+    if shutil.which("mutool"):
+        komutlar.append([shutil.which("mutool"), "merge", "-o", hedef, yol, "1-%d" % ILK_SAYFA])
+    for komut in komutlar:
+        try:
+            subprocess.run(komut, check=True, timeout=180, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            if os.path.exists(hedef) and os.path.getsize(hedef) > 0:
+                return hedef
+        except (OSError, subprocess.SubprocessError):
+            continue
+    return None
+
+
 def kaydet(taban, cikti, ad):
     """Tek bir dosyayi indirir: PDF oldugu gibi, HTML duz metne cevrilerek. HTML'in ham halini dondurur."""
     bayt = indir(taban + ad)
@@ -222,7 +280,9 @@ def kaydet(taban, cikti, ad):
         yol = os.path.join(cikti, ad)
         with open(yol, "wb") as f:
             f.write(bayt)
-        pdf_metni(yol)
+        # Metin katmani yoksa (taranmis goruntu) ve dosya buyukse ilk sayfalar ayrica kaydedilir
+        if pdf_metni(yol) is None and len(bayt) > BUYUK_PDF:
+            pdf_ilk_sayfalar(yol)
         return None
     sayfa = coz(bayt)
     with open(os.path.join(cikti, os.path.splitext(ad)[0] + ".txt"), "w", encoding="utf-8") as f:

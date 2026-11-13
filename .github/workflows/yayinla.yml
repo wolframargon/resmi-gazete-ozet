@@ -33,7 +33,13 @@ jobs:
           cd depo
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch --quiet origin "refs/heads/${DAL}:refs/remotes/origin/${DAL}"
+          # Dal, ayni dala yapilan onceki bir gonderimin isinde birlestirilip silinmis olabilir
+          # (ornegin rutin once dunu, sonra bugunu yayinladiysa); o zaman yapilacak is kalmamistir.
+          if ! git fetch --quiet origin "refs/heads/${DAL}:refs/remotes/origin/${DAL}"; then
+            echo "Dal artik yok; onceki is birlestirmis."
+            exit 0
+          fi
+          birlesen="$(git rev-parse "origin/${DAL}")"
 
           durum=0
           degisen="$(git diff --name-only "origin/main...origin/${DAL}")"
@@ -59,5 +65,6 @@ jobs:
 
           # Dal her durumda silinir; ertesi gunun gonderimi onu yeniden olusturur.
           # (Silinmezse eski dal, yeni gonderimin reddedilmesine yol acar.)
-          git push --quiet origin --delete "${DAL}" || true
+          # Bu is surerken dala yeni bir gonderim geldiyse dal silinmez; siradaki is onu birlestirir.
+          git push --quiet --force-with-lease="refs/heads/${DAL}:${birlesen}" origin --delete "${DAL}" || true
           exit "${durum}"
