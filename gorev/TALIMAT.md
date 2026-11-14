@@ -98,12 +98,15 @@ kullan: h1, h2, h3, p, ul, li, b, i, mark, a, table, tr, th, td.
    tarih, kimin etkilendiği) `<mark>` ile vurgula. Personel mevzuatıyla ilgili bir düzenleme
    varsa burada mutlaka yer ver. Sayı sıradan atama ve ilanlardan ibaretse bunu açıkça
    söyle; önem uydurma.
-4. `<h2>Maddeler</h2>` — fihristteki bölüm sırasıyla, her bölüm için `<h3>`. Her madde için:
+4. `<h2>Atamalar</h2>` — yalnızca sayıda kişilere ilişkin atama, görevden alma ya da görev
+   yeri değişikliği kararı varsa: görev, eski ve yeni görevli tablosu (aşağıdaki "Atamalar"
+   bölümü). Atama kararı yoksa bu bölümü hiç yazma.
+5. `<h2>Maddeler</h2>` — fihristteki bölüm sırasıyla, her bölüm için `<h3>`. Her madde için:
    başlığı fihristteki bağlantısına `<a href>` ile bağla, altına kurum ve yürürlük satırını
    yaz (aşağıdaki iskelete bak), ardından 1-3 cümleyle ne getirdiğini sade Türkçeyle anlat.
    Kimleri etkilediğini belirt; varsa geçiş hükmünü ayrı paragrafta ver. İlan
    bölümündeki kalemleri yalnızca başlıklarıyla listele.
-5. `<h2>Yorum</h2>` — bu sayının pratikte ne anlama geldiğine dair kısa, tarafsız bir
+6. `<h2>Yorum</h2>` — bu sayının pratikte ne anlama geldiğine dair kısa, tarafsız bir
    değerlendirme. Bunun yapay zekâ yorumu olduğu, hukuki danışmanlık olmadığı anlaşılmalı.
 
 ### İskelet
@@ -122,6 +125,14 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <ul>
 <li><b>Kısa başlık.</b> Açıklama; kritik bilgi <mark>vurgulu</mark>.</li>
 </ul>
+
+<h2>Atamalar</h2>
+<p>Bu sayıda N atama kararı var; hangi kurumları kapsadığını söyleyen 1 cümle.</p>
+<table>
+<tr><th>Kurum ve görev</th><th>Eski</th><th>Yeni</th></tr>
+<tr><td>... Bakanlığı · ... Genel Müdürü</td><td>Ad SOYAD (görevden alındı)</td><td>Ad SOYAD</td></tr>
+<tr><td>... Üniversitesi · Rektör</td><td>Belirtilmemiş</td><td>Ad SOYAD</td></tr>
+</table>
 
 <h2>Maddeler</h2>
 
@@ -148,6 +159,7 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <p><b>Ekler:</b> <a href="EK_ADRESI">Ek-1</a></p>
 <p>Ne olduğunu, kimi kapsadığını ve yürürlük tarihini söyleyen 2-3 cümle.</p>
 <p><b>Geçiş hükmü:</b> Geçici maddeyi, intibakı ya da kazanılmış hakları anlatan 1-2 cümle.</p>
+<p><b>Kimleri ilgilendiriyor:</b> Memur, Sözleşmeli personel</p>
 <ul>
 <li><b>Kapsam ve kadrolar:</b> ...</li>
 <li><b>Şartlar:</b> ...</li>
@@ -188,6 +200,15 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
     Hükümler farklı tarihlerde yürürlüğe giriyorsa en erken ileri tarihi yaz, ötekileri
     açıklama paragrafında belirt. Metinde yürürlük maddesi yoksa (atama kararı, ilan vb.)
     `Yürürlük` kısmını yazma. İkisi de yoksa bu paragrafı hiç yazma.
+- Kimleri ilgilendiriyor satırı: yalnızca personel mevzuatı maddelerinde, açıklama paragrafından
+  (varsa geçiş hükmü paragrafından) sonra, ayrıntı listesinden önce tek paragraf yaz:
+  `<p><b>Kimleri ilgilendiriyor:</b> Memur, Sözleşmeli personel</p>`. Satırı açıklamadan önce
+  yazma: uygulamanın eski sürümleri onu kartın görünen ilk paragrafı sayar. Düzenlemenin
+  doğrudan uygulandığı kesimleri, en çok üç tane, yalnızca şu listedeki adlarla ve bu yazımla
+  virgülle ayırarak yaz: Memur · Sözleşmeli personel · Geçici personel · İşçi · Akademik
+  personel · Öğretmen · Sağlık personeli · Güvenlik personeli · Hâkim ve savcı · Emekli · Tüm
+  kamu personeli. Metinden hangi kesimi kapsadığı anlaşılmıyorsa bu satırı yazma; tahmin etme.
+  Uygulama bunu kartta etiket olarak gösterir ve personel maddelerini bu kesimlere göre süzdürür.
 - Ekler satırı: maddenin `EK` satırında bildirilen eki varsa, kurum ve yürürlük satırının
   hemen altına ayrı bir paragraf yaz:
   `<p><b>Ekler:</b> <a href="EK_ADRESI">Ek-1</a></p>`. Birden çok ek dosyası varsa
@@ -308,8 +329,9 @@ Böyle bir maddede:
    ayrıntıları diğer maddelerdeki gibi "Ayrıntıları göster" düğmesinin arkasında kapalı gelir
    (düğmede, ayrıntılarda karşılaştırma ya da sıkça sorulanlar olduğu yazar). Bu yüzden asıl
    bilgiyi açıklama paragrafında ver. Kurum ve yürürlük satırı bunun altına gelir.
-2. Açıklama paragrafında düzenlemenin ne olduğunu, hangi kurumun hangi personelini
-   kapsadığını ve yürürlük tarihini söyle.
+2. Açıklama paragrafında düzenlemenin ne olduğunu, hangi kurumun hangi personelini kapsadığını
+   ve yürürlük tarihini söyle. Açıklamadan (varsa geçiş hükmünden) sonra "Kimleri
+   ilgilendiriyor" satırını yaz (yukarıdaki kurallar ve kesim listesi).
 3. Geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm varsa açıklama paragrafından
    sonra `<p><b>Geçiş hükmü:</b> ...</p>` paragrafını yaz; bunu ayrıntı listesinde tekrarlama.
 4. Ayrıntı listesinde, metinde karşılığı olan başlıkları doldur:
@@ -347,6 +369,35 @@ soruyu ve kısa cevabını ekle:
   gösterir.
 - Aynı bilgiyi açıklama paragrafında ya da geçiş hükmünde zaten verdiysen soruyu ondan farklı,
   tamamlayıcı bir noktaya yönelt.
+
+## Atamalar
+
+Sayıda kişilere ilişkin atama, görevden alma ya da görev yeri değişikliği kararları
+(Cumhurbaşkanı kararları ve "Atama Kararları" bölümü dahil) varsa, `<h2>Maddeler</h2>`
+bölümünden önce bir `<h2>Atamalar</h2>` bölümü yaz. Uygulama bunu kapakta "Bu sayıda N atama"
+şeridi ve her görev için eski ve yeni görevliyi yan yana gösteren kartlar olarak gösterir.
+
+1. Önce 1 cümlelik bir paragraf: kaç atama kararı olduğu ve hangi kurumları kapsadığı.
+2. Ardından tek bir tablo; başlık satırı tam olarak
+   `<tr><th>Kurum ve görev</th><th>Eski</th><th>Yeni</th></tr>`. Her satır bir görevdir.
+   - `Kurum ve görev`: kurumu ve görevin adını (unvanı) metindeki gibi, aralarına " · " koyarak
+     yaz (`Hazine ve Maliye Bakanlığı · Gelir Politikaları Genel Müdürü`).
+   - `Yeni`: o göreve atanan kişinin adı ve soyadı. Vekâleten atamada adın ardına
+     `(vekâleten)` yaz.
+   - `Eski`: aynı kararda o görevden alındığı yazılan kişinin adı ve soyadı, ardından parantez
+     içinde kararın ifadesi: `(görevden alındı)`, `(başka göreve atandı)`, `(emekliye ayrıldı)`
+     gibi. Kararda önceki görevli yazmıyorsa `Belirtilmemiş` yaz; başka kaynaktan arama.
+   - Yalnızca görevden alma varsa `Yeni` hücresine `—` yaz.
+3. Adları Resmî Gazete'deki yazımıyla, harfi harfine aktar (büyük harfler ve Türkçe harfler
+   dahil); kısaltma, düzeltme ya da tahmin yapma. Okuyamadığın ya da emin olmadığın bir adı
+   yazma: o satırı atla ve paragrafa "bazı kararların metni incelenemedi" diye ekle.
+4. Yalnızca kararlarda yazan ad, soyad ve görev bilgilerini kullan. T.C. kimlik numarası,
+   doğum yeri ve tarihi, adres ya da kişi hakkında başka hiçbir bilgi yazma; kişiler hakkında
+   yorum yapma; internetten ya da hafızandan bilgi ekleme.
+5. En çok 60 satır yaz. Daha fazla atama varsa ilk 60'ı yaz ve paragrafa kalan sayıyı ve "tam
+   liste için Resmî Gazete'deki karara bakın" ifadesini ekle.
+6. Atama kararları "Maddeler" bölümünde de kendi grubunda (`<h3>` ile) her zamanki gibi başlık
+   ve bağlantıyla yer alır; orada adları yeniden sayma, 1 cümleyle kapsamını söyle.
 
 ## Doğruluk
 

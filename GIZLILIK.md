@@ -46,17 +46,32 @@ gönderilmez ve uygulamayı kaldırdığınızda silinir:
 
 - İndirilen günlük özetler ve arama dizini,
 - "Kaydet" ile işaretlediğiniz maddeler ve bu maddelere yazdığınız kişisel notlar,
-- Tema (Açık / Koyu / Sistem), yazı boyutu ve sesli okuma hızı tercihleriniz,
+- Yürürlük takviminde kurduğunuz hatırlatıcılar,
+- Tema (Açık / Koyu / Sistem), yazı boyutu, sesli okuma hızı ve "Sadece Personel" süzgeci
+  tercihleriniz,
 - Bildirim Radarı'na yazdığınız takip kelimeleri,
 - Geçmiş listesi için kullanılan teknik bilgiler (özetlerin tarihleri ve boyutları).
+
+"Kayıtları yedekle"yi seçtiğinizde kaydedilen maddeler, notlar ve Bildirim Radarı kelimeleri tek
+bir dosyaya yazılır; dosya yalnızca sizin seçtiğiniz yere (ör. telefonun Dosyalar uygulaması ya da
+Google Drive) kaydedilir ve uygulama onu kendisi hiçbir yere göndermez. Ana ekran widget'ı yalnızca
+telefondaki özetin bilgilerini gösterir.
 
 Uygulama içi aramalar cihazdaki özetlerde ve indirilmiş arama dizininde yapılır; aradığınız
 sözcükler kaydedilmez ve hiçbir yere gönderilmez ("tüm arşivde ara"yı kendiniz seçmedikçe).
 Bildirim Radarı'ndaki kelimeler yeni özetle cihazda karşılaştırılır; kelimeler hiçbir yere
 gönderilmez.
 
-6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında uygulama tarafından işlenen bir
-kişisel veri bulunmamaktadır.
+6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında uygulama, kullanıcılarına ait
+hiçbir kişisel veriyi işlemez.
+
+### Özetlerdeki atama kararları
+
+Özetlerin "Atamalar" bölümünde, Resmî Gazete'de kamuya açık olarak yayımlanan atama, görevden
+alma ve görev yeri değişikliği kararlarındaki görevli adları ve görevleri, kararlardaki yazımıyla
+aktarılır. Bu bilgiler yalnızca Resmî Gazete'nin kamuya açık yayınından alınır; kişiler hakkında
+başka hiçbir bilgi (kimlik numarası, iletişim bilgisi vb.) eklenmez. Bağlayıcı olan, Resmî
+Gazete'de yayımlanan kararın kendisidir. Bir düzeltme talebiniz varsa aşağıdaki adrese yazabilirsiniz.
 
 ### İzinler ve cihaz özellikleri
 
@@ -128,17 +143,33 @@ anywhere and are deleted when you uninstall the app:
 
 - Downloaded daily summaries and the search index,
 - Items you mark with "Kaydet" (save) and the personal notes you add to them,
-- Your theme (Light / Dark / System), text size and text-to-speech speed choices,
+- The reminders you set in the effective-date calendar,
+- Your theme (Light / Dark / System), text size, text-to-speech speed and "Sadece Personel"
+  (personnel only) filter choices,
 - The keywords you enter in the "Bildirim Radarı" (notification radar),
 - Technical data used for the history list (dates and sizes of the summaries).
+
+When you choose "Kayıtları yedekle" (back up), your saved items, notes and radar keywords are
+written to a single file; the file is saved only where you choose (e.g. the phone's Files app or
+Google Drive) and the app never sends it anywhere by itself. The home screen widget shows only
+information from the summary stored on the phone.
 
 In-app searches run over the summaries and the downloaded search index on the device; search
 terms are not stored or sent anywhere (unless you choose "search the whole archive" yourself).
 Notification radar keywords are matched against new summaries on the device and are never sent
 anywhere.
 
-No personal data is processed by the app within the meaning of the Turkish Personal Data
-Protection Law No. 6698 (KVKK).
+Within the meaning of the Turkish Personal Data Protection Law No. 6698 (KVKK), the app does not
+process any personal data of its users.
+
+### Appointment decisions in the summaries
+
+The "Atamalar" (appointments) section of the summaries reproduces the names and positions of
+officials as written in the appointment, dismissal and reassignment decisions publicly published
+in the Official Gazette. This information is taken only from the Official Gazette's public
+publication; no other information about these persons (ID numbers, contact details, etc.) is
+added. The decision published in the Official Gazette is authoritative. You can request a
+correction at the address below.
 
 ### Permissions and device features
 
