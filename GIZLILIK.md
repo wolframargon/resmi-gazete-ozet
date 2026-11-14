@@ -45,7 +45,7 @@ Aşağıdakiler yalnızca sizin cihazınızda, uygulamanın özel alanında tutu
 gönderilmez ve uygulamayı kaldırdığınızda silinir:
 
 - İndirilen günlük özetler ve arama dizini,
-- "Kaydet" ile işaretlediğiniz maddeler,
+- "Kaydet" ile işaretlediğiniz maddeler ve bu maddelere yazdığınız kişisel notlar,
 - Tema (Açık / Koyu / Sistem), yazı boyutu ve sesli okuma hızı tercihleriniz,
 - Bildirim Radarı'na yazdığınız takip kelimeleri,
 - Geçmiş listesi için kullanılan teknik bilgiler (özetlerin tarihleri ve boyutları).
@@ -127,7 +127,7 @@ The following are kept only on your device, in the app's private storage; they a
 anywhere and are deleted when you uninstall the app:
 
 - Downloaded daily summaries and the search index,
-- Items you mark with "Kaydet" (save),
+- Items you mark with "Kaydet" (save) and the personal notes you add to them,
 - Your theme (Light / Dark / System), text size and text-to-speech speed choices,
 - The keywords you enter in the "Bildirim Radarı" (notification radar),
 - Technical data used for the history list (dates and sizes of the summaries).
