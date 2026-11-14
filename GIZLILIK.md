@@ -1,6 +1,6 @@
 # Özet RG: Gizlilik Politikası / Privacy Policy
 
-Son güncelleme / Last updated: 13 Kasım 2026 / 13 November 2026
+Son güncelleme / Last updated: 14 Kasım 2026 / 14 November 2026
 
 Geliştirici / Developer: Birol ABANUZOĞLU · İletişim / Contact: <birolabanuzoglu@gmail.com>
 
@@ -46,11 +46,14 @@ gönderilmez ve uygulamayı kaldırdığınızda silinir:
 
 - İndirilen günlük özetler ve arama dizini,
 - "Kaydet" ile işaretlediğiniz maddeler,
-- Tema tercihiniz (Açık / Koyu / Sistem),
+- Tema tercihiniz (Açık / Koyu / Sistem) ve sesli okuma hızı tercihiniz,
+- Bildirim Radarı'na yazdığınız takip kelimeleri,
 - Geçmiş listesi için kullanılan teknik bilgiler (özetlerin tarihleri ve boyutları).
 
 Uygulama içi aramalar cihazdaki özetlerde ve indirilmiş arama dizininde yapılır; aradığınız
 sözcükler kaydedilmez ve hiçbir yere gönderilmez ("tüm arşivde ara"yı kendiniz seçmedikçe).
+Bildirim Radarı'ndaki kelimeler yeni özetle cihazda karşılaştırılır; kelimeler hiçbir yere
+gönderilmez.
 
 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında uygulama tarafından işlenen bir
 kişisel veri bulunmamaktadır.
@@ -64,6 +67,9 @@ kişisel veri bulunmamaktadır.
 - **Takvime ekleme ve paylaşma:** Yalnızca siz dokunduğunuzda, telefonunuzun takvim ya da
   paylaşım ekranı açılır. Uygulama takviminizi okumaz; paylaşımı siz seçtiğiniz uygulamayla
   yaparsınız.
+- **PDF bilgi notu:** "PDF Paylaş"a dokunduğunuzda bilgi notu cihazda bir PDF dosyasına
+  çevrilir ve yalnızca paylaşım ekranında seçtiğiniz uygulamaya, okuma izniyle verilir. Dosya
+  uygulamanın geçici alanında durur; uygulama onu başka hiçbir yere göndermez.
 - **AI'ya Sor:** Yalnızca siz bir soru seçip ya da yazıp düğmeye dokunduğunuzda, sorunuz ve
   ilgili maddenin (ya da günün) özeti tek bir metin olarak panoya kopyalanır ve sizin
   seçtiğiniz yerde açılır: "ChatGPT'de Aç" bu metni `chatgpt.com` adresinde (tarayıcıda ya da
@@ -122,11 +128,14 @@ anywhere and are deleted when you uninstall the app:
 
 - Downloaded daily summaries and the search index,
 - Items you mark with "Kaydet" (save),
-- Your theme choice (Light / Dark / System),
+- Your theme choice (Light / Dark / System) and text-to-speech speed,
+- The keywords you enter in the "Bildirim Radarı" (notification radar),
 - Technical data used for the history list (dates and sizes of the summaries).
 
 In-app searches run over the summaries and the downloaded search index on the device; search
 terms are not stored or sent anywhere (unless you choose "search the whole archive" yourself).
+Notification radar keywords are matched against new summaries on the device and are never sent
+anywhere.
 
 No personal data is processed by the app within the meaning of the Turkish Personal Data
 Protection Law No. 6698 (KVKK).
@@ -140,6 +149,9 @@ Protection Law No. 6698 (KVKK).
   (e.g. Google, Samsung); the app sends it nowhere else.
 - **Add to calendar and share:** only when you tap them, your phone's calendar or share sheet
   opens. The app does not read your calendar; you share with the app you choose.
+- **PDF information note:** when you tap "PDF Paylaş", the note is turned into a PDF file on the
+  device and handed, with read-only access, only to the app you pick in the share sheet. The
+  file stays in the app's temporary storage; the app sends it nowhere else.
 - **AI'ya Sor (ask AI):** only when you pick or type a question and tap a button, your question
   and the summary of the related item (or day) are copied to the clipboard as one text and
   opened where you choose: "ChatGPT'de Aç" opens it at `chatgpt.com` (in the browser or the

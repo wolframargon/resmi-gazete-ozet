@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Yazilan ozeti depoya isler: index.json'u yeniler, commit eder ve gonderir.
+"""Yazilan ozeti depoya isler: index.json ve arama.json'u yeniler, commit eder ve gonderir.
 
 Kullanim: python3 gorev/yayinla.py yyyyMMdd [dal]
 
@@ -48,8 +48,30 @@ def bolum(ozet, baslik):
     return m.group(1) if m else ""
 
 
+KOK_UZUNLUGU = 7  # arama dizinindeki kelimeler bu kadar harfe kirpilir; uygulama sorguyu da boyle kirpar
+KELIME = re.compile(r"[0-9a-zçğıöşüâîû]+")
+
+
+def arama_kelimeleri(metin):
+    """Arama dizini icin bir ozetin kelimeleri: benzersiz kokler (ilk 7 harf), alfabetik, bosluklu.
+
+    Tek harfli kelimeler (rakam degilse) atilir. Baska bir kokun icinde gecen kok de atilir;
+    uygulama dizinde alt dize aradigi icin onu yine bulur. Boylece gun basina dizin tam metindeki
+    ~14 KB yerine ~4 KB tutar. Uygulama aranan her kelimeyi de 7 harfe kirpar ve hepsinin dizinde
+    gecmesini ister ("gorevde yukselme" iki kelimenin ayni gunde gectigi gunleri bulur).
+    """
+    kokler = {k[:KOK_UZUNLUGU] for k in KELIME.findall(metin) if len(k) > 1 or k.isdigit()}
+    tutulan, birlesik = [], " "
+    for k in sorted(kokler, key=lambda s: (-len(s), s)):
+        if k in birlesik:
+            continue
+        tutulan.append(k)
+        birlesik += k + " "
+    return " ".join(sorted(tutulan))
+
+
 def arama_kaydi(ozet):
-    """arama.json icin bir gunun kaydi: sayi, duzenleme sayisi, personel, onizleme ve duz metin."""
+    """arama.json icin bir gunun kaydi: sayi, duzenleme sayisi, personel, onizleme ve kelime kokleri."""
     sayi = re.search(r"(\d{3,6})\s+Sayılı", ozet)
     maddeler = bolum(ozet, "Maddeler")
     duzenleme = len(re.findall(r'(?is)<p>\s*<a\s[^>]*href="[^"]+"[^>]*>[^<]+</a>\s*</p>', maddeler))
@@ -60,7 +82,7 @@ def arama_kaydi(ozet):
         "duzenleme": duzenleme,
         "personel": bool(re.search(r"(?i)<b>\s*Personel mevzuatı\s*</b>", ozet)),
         "onizleme": " · ".join(b for b in basliklar if b),
-        "metin": kucuk_harf(duz_metin(ozet)),
+        "metin": arama_kelimeleri(kucuk_harf(duz_metin(ozet))),
     }
 
 
@@ -72,7 +94,8 @@ def index_yaz():
     yeniden indirir; boylece sonradan duzeltilen ozetler telefonda da guncellenir.
 
     arama.json: butun gunlerin aranabilir bilgileri. Uygulamanin gecmis paneli, telefona
-    inmemis gunlerde de bu dosya sayesinde indirmeden arama yapar.
+    inmemis gunlerde de bu dosya sayesinde indirmeden arama yapar. Surum 2'de "metin" alani
+    ozetin tam metni degil, kelime kokleridir ("kok": kac harfe kirpildigi; bkz. arama_kelimeleri).
     """
     klasor = os.path.join(KOK, "ozetler")
     tarihler = sorted(
@@ -85,7 +108,7 @@ def index_yaz():
             gunler[t] = arama_kaydi(f.read())
     arama = os.path.join(KOK, "arama.json")
     with open(arama, "w", encoding="utf-8", newline="\n") as f:
-        json.dump({"surum": 1, "gunler": gunler}, f, ensure_ascii=False, separators=(",", ":"))
+        json.dump({"surum": 2, "kok": KOK_UZUNLUGU, "gunler": gunler}, f, ensure_ascii=False, separators=(",", ":"))
     boyutlar = {t: boyut(os.path.join(klasor, t + ".html")) for t in tarihler}
     with open(os.path.join(KOK, "index.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump(

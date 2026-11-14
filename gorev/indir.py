@@ -2,6 +2,7 @@
 """Gunluk Resmi Gazete sayisini indirir ve ozetlenmeye hazir hale getirir.
 
 Kullanim: python3 gorev/indir.py [yyyyMMdd]   (tarih verilmezse Turkiye saatine gore bugun)
+          python3 gorev/indir.py --sonra yyyyMMdd   (telafiye o gunden sonraki gunlerden devam et)
 Ciktinin ilk satiri: ZATEN_VAR | YAYINLANMADI | AG_HATASI | HAZIR <klasor>
 
 HAZIR'dan sonraki satirlar:
@@ -13,8 +14,10 @@ HAZIR'dan sonraki satirlar:
   INDIRILEMEDI <dosyalar>                 indirilemeyenler (varsa)
   GUNCELLE ozetler/<tarih>.html M<n>      ozet zaten var ama sonradan mukerrer sayi cikti:
                                           yeni ozet yazilmaz, mevcut ozet guncellenir
-  KACIRILAN <tarih>                       dunun ozeti hic yazilmamis; once dun ozetlenir
-  YENIDEN_CALISTIR python3 gorev/indir.py <bugun>   dun bittikten sonra bugune gec
+  KACIRILAN <tarih>                       son 3 gunden birinin ozeti hic yazilmamis; once o gun
+                                          (eksik olan en eski gun) ozetlenir
+  YENIDEN_CALISTIR python3 gorev/indir.py --sonra <tarih>   o gun yayinlandiktan sonra calistirilir;
+                                          siradaki eksik gune ya da bugune gecer
 
 Her PDF'in metni, cikarilabiliyorsa, yanina <ad>.pdf.txt olarak yazilir (buyuk PDF'ler icin).
 Metni cikmayan (taranmis) ve 10 MB'tan buyuk PDF'lerin ilk 8 sayfasi <ad>-ilk8.pdf olarak
@@ -84,28 +87,34 @@ def metne_cevir(sayfa, taban):
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    if len(sys.argv) > 1:
-        tarih = sys.argv[1]
+    argumanlar = sys.argv[1:]
+    sonra = None
+    if len(argumanlar) == 2 and argumanlar[0] == "--sonra":
+        sonra = argumanlar[1]
+        argumanlar = []
+        if not re.fullmatch(r"\d{8}", sonra):
+            sys.exit("--sonra tarihi yyyyMMdd biciminde olmali")
+    if argumanlar:
+        tarih = argumanlar[0]
     else:
         turkiye = datetime.timezone(datetime.timedelta(hours=3))
         tarih = datetime.datetime.now(turkiye).strftime("%Y%m%d")
     if not re.fullmatch(r"\d{8}", tarih):
         sys.exit("Tarih yyyyMMdd biciminde olmali")
 
-    # Tarih verilmeden calistirildiysa (gunluk rutin) once dune bakilir:
-    # - dunun ozeti hic yazilmamissa (sayi rutinden sonra yayimlandi, rutin calismadi...) ve sayi
-    #   sitede yayindaysa once dun ozetlenir;
-    # - dunun ozeti varsa ama ozet yayinlandiktan sonra mukerrer sayi ciktiysa once dun guncellenir.
-    # Ikisinde de ciktinin sonundaki YENIDEN_CALISTIR satiri bugune gecilmesini soyler.
+    # Tarih verilmeden calistirildiysa (gunluk rutin) once son 3 gune, en eskisinden baslayarak bakilir:
+    # - bir gunun ozeti hic yazilmamissa (sayi rutinden sonra yayimlandi, rutin calismadi ya da
+    #   kullanim siniri yuzunden basarisiz oldu...) ve sayi sitede yayindaysa once o gun ozetlenir;
+    # - ozeti olan bir gunde ozet yayinlandiktan sonra mukerrer sayi ciktiysa once o gun guncellenir.
+    # Ikisinde de ciktinin sonundaki YENIDEN_CALISTIR satiri, o gun yayinlandiktan sonra calistirilacak
+    # komutu verir (--sonra <o gun>): sira bir sonraki eksik gune, eksik kalmadiysa bugune gecer.
     bugun = None
     kacirilan = False
-    if len(sys.argv) == 1:
-        dun = (datetime.datetime.strptime(tarih, "%Y%m%d") - datetime.timedelta(days=1)).strftime("%Y%m%d")
-        if os.path.exists(os.path.join(KOK, "ozetler", dun + ".html")):
-            if yeni_mukerrer(dun):
-                bugun, tarih = tarih, dun
-        elif yayinda(dun):
-            bugun, tarih, kacirilan = tarih, dun, True
+    if not argumanlar:
+        bulunan = telafi(tarih, sonra)
+        if bulunan:
+            bugun = tarih
+            tarih, kacirilan = bulunan
 
     guncelle = 0
     if os.path.exists(os.path.join(KOK, "ozetler", tarih + ".html")):
@@ -161,10 +170,45 @@ def main():
     if guncelle:
         print("GUNCELLE", "ozetler/%s.html" % tarih, "M%d" % guncelle)
     if bugun:
-        print("YENIDEN_CALISTIR", "python3 gorev/indir.py", bugun)
+        print("YENIDEN_CALISTIR", "python3 gorev/indir.py --sonra", tarih)
 
 
 MUKERRER_SINIRI = 9
+TELAFI_GUN = 3  # tarih verilmeden calistirildiginda kac gun geriye bakilir
+
+
+def ilk_ozet():
+    """Depodaki en eski ozetin tarihi (yyyyMMdd); hic ozet yoksa None."""
+    klasor = os.path.join(KOK, "ozetler")
+    if not os.path.isdir(klasor):
+        return None
+    tarihler = [ad[:8] for ad in os.listdir(klasor) if re.fullmatch(r"\d{8}\.html", ad)]
+    return min(tarihler) if tarihler else None
+
+
+def telafi(tarih, sonra=None):
+    """Son TELAFI_GUN gune, en eskisinden baslayarak bakar; ilk islenecek gunu dondurur.
+
+    Donus: (gun, True) ozeti hic yazilmamis ve sayisi sitede yayinda olan gun (KACIRILAN);
+    (gun, False) ozeti var ama sonradan mukerrer sayi cikmis gun (GUNCELLE); yoksa None.
+    [sonra] verilirse yalnizca ondan sonraki gunlere bakilir; boylece ayni oturumda telafi
+    edilen gun yeniden secilmez ve dongu olusmaz. Depodaki ilk ozetten onceki gunler telafi
+    edilmez (proje oncesi gunler kendiliginden ozetlenmesin).
+    """
+    ilk = ilk_ozet()
+    if ilk is None:
+        return None
+    t = datetime.datetime.strptime(tarih, "%Y%m%d")
+    for fark in range(TELAFI_GUN, 0, -1):  # 3, 2, 1: eksik olan en eski gunden baslanir
+        gun = (t - datetime.timedelta(days=fark)).strftime("%Y%m%d")
+        if gun < ilk or (sonra and gun <= sonra):
+            continue
+        if os.path.exists(os.path.join(KOK, "ozetler", gun + ".html")):
+            if yeni_mukerrer(gun):
+                return gun, False
+        elif yayinda(gun):
+            return gun, True
+    return None
 PDF_METIN_ALT_SINIRI = 200  # bundan kisa cikan metin, taranmis goruntu sayilir ve yazilmaz
 
 

@@ -25,10 +25,10 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
    - `HAZIR <klasör>`: devam et. Çıktıdaki `TARIH` satırı tarihi (yyyyMMdd) verir.
 
    Üç özel durum (hepsi seyrektir; çıktıda bu satırlar yoksa bu paragrafı atla):
-   - Çıktıda `KACIRILAN <TARIH>` satırı varsa dünün sayısı özetlenmemiş (sayı rutinden sonra
-     yayımlanmış ya da rutin çalışmamış). `TARIH` dünün tarihidir; o gün için olağan şekilde,
-     aşağıdaki bütün adımlarla yeni bir özet yaz ve yayınla. Özette sayının geç
-     özetlendiğini belirtmene gerek yok.
+   - Çıktıda `KACIRILAN <TARIH>` satırı varsa son üç günden birinin sayısı özetlenmemiş (sayı
+     rutinden sonra yayımlanmış ya da rutin çalışmamış). Betik eksik olan en eski günü hazırlar;
+     `TARIH` o günün tarihidir. O gün için olağan şekilde, aşağıdaki bütün adımlarla yeni bir özet
+     yaz ve yayınla. Özette sayının geç özetlendiğini belirtmene gerek yok.
    - Çıktıda `GUNCELLE ozetler/<TARIH>.html M<n>` satırı varsa o günün özeti daha önce
      yayınlanmış, ama sonradan mükerrer sayı çıkmıştır. Yeni özet yazma: mevcut dosyayı oku,
      asıl sayıya ilişkin bölümleri olduğu gibi bırak ve yalnızca mükerrer sayının maddelerini
@@ -36,10 +36,12 @@ Bütün komutlar deponun kök klasöründe çalıştırılır.
      bağlantısı, gerekiyorsa "Öne çıkanlar"a bir satır, "Maddeler"e yeni gruplar). Grup
      başlığında `<n>. Mükerrer Sayı` ibaresi mutlaka geçsin; betik mükerrerin işlendiğini
      bundan anlar. Sonra 6. adımdaki gibi o tarihle yayınla.
-   - Çıktıda `YENIDEN_CALISTIR python3 gorev/indir.py <bugün>` satırı varsa betik önce dünü
-     hazırlamıştır (`KACIRILAN` ya da `GUNCELLE` ile birlikte gelir). Dünü yayınladıktan sonra
-     o komutu aynen çalıştır ve bugünün sayısı için adımları baştan uygula. İki yayın aynı
-     çalışma dalına gider; depodaki iş akışı ikisini de sırayla birleştirir.
+   - Çıktıda `YENIDEN_CALISTIR python3 gorev/indir.py --sonra <TARIH>` satırı varsa betik önce
+     geçmiş bir günü hazırlamıştır (`KACIRILAN` ya da `GUNCELLE` ile birlikte gelir). O günü
+     yayınladıktan sonra komutu aynen çalıştır ve çıktısına göre adımları baştan uygula: komut
+     sıradaki eksik günü, eksik gün kalmadıysa bugünün sayısını hazırlar. Böylece en çok üç geçmiş
+     gün ve bugün sırayla yayınlanır; hepsi aynı çalışma dalına gider ve depodaki iş akışı
+     hepsini sırayla birleştirir.
 
 2. `<klasör>/fihrist.txt` dosyasını oku. Bu, günün fihristidir: bölüm başlıkları, madde
    başlıkları ve her maddenin `[BAGLANTI: ...]` adresi. Çıktıda `MUKERRER` satırı varsa aynı
