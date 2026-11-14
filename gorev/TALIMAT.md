@@ -132,7 +132,8 @@ olursa içerik düz liste gibi görünür; bu yüzden etiketleri aşağıdaki is
 <tr><th>Kurum ve görev</th><th>Eski</th><th>Yeni</th><th>Eski görevlinin kaynağı</th></tr>
 <tr><td>... Bakanlığı · ... Genel Müdürü</td><td>Ad SOYAD (görevden alındı)</td><td>Ad SOYAD</td><td>Bu karar</td></tr>
 <tr><td>... Üniversitesi · Rektör</td><td>Ad SOYAD (önceki görevli)</td><td>Ad SOYAD</td><td><a href="RG_ADRESI">Resmî Gazete, GG.AA.YYYY</a></td></tr>
-<tr><td>... Valiliği · Vali Yardımcısı</td><td>Belirtilmemiş</td><td>Ad SOYAD</td><td>—</td></tr>
+<tr><td>... Valiliği · Vali Yardımcısı</td><td>Belirtilmemiş</td><td>Ad SOYAD</td><td>Araştırıldı, bulunamadı</td></tr>
+<tr><td>... Kaymakamlığı · Kaymakam</td><td>Belirtilmemiş</td><td>Ad SOYAD</td><td>—</td></tr>
 </table>
 
 <h2>Maddeler</h2>
