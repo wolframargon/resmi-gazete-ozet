@@ -69,9 +69,13 @@ hiçbir kişisel veriyi işlemez.
 
 Özetlerin "Atamalar" bölümünde, Resmî Gazete'de kamuya açık olarak yayımlanan atama, görevden
 alma ve görev yeri değişikliği kararlarındaki görevli adları ve görevleri, kararlardaki yazımıyla
-aktarılır. Bu bilgiler yalnızca Resmî Gazete'nin kamuya açık yayınından alınır; kişiler hakkında
-başka hiçbir bilgi (kimlik numarası, iletişim bilgisi vb.) eklenmez. Bağlayıcı olan, Resmî
-Gazete'de yayımlanan kararın kendisidir. Bir düzeltme talebiniz varsa aşağıdaki adrese yazabilirsiniz.
+aktarılır. Genel müdür yardımcısı ve üstü görevlerde (kurum başkanı, rektör, vali, büyükelçi
+gibi) ve vali yardımcısı ile il müdüründe, kararda önceki görevlinin adı yoksa önceki görevli
+Resmî Gazete arşivinden ya da kurumların
+resmî siteleri ve haber ajansları gibi kamuya açık kaynaklardan araştırılır; bu durumda kaynağın
+bağlantısı adın yanında gösterilir. Kişiler hakkında görev bilgisi dışında hiçbir bilgi (kimlik
+numarası, iletişim bilgisi vb.) eklenmez. Bağlayıcı olan, Resmî Gazete'de yayımlanan kararın
+kendisidir. Bir düzeltme talebiniz varsa aşağıdaki adrese yazabilirsiniz.
 
 ### İzinler ve cihaz özellikleri
 
@@ -166,10 +170,14 @@ process any personal data of its users.
 
 The "Atamalar" (appointments) section of the summaries reproduces the names and positions of
 officials as written in the appointment, dismissal and reassignment decisions publicly published
-in the Official Gazette. This information is taken only from the Official Gazette's public
-publication; no other information about these persons (ID numbers, contact details, etc.) is
-added. The decision published in the Official Gazette is authoritative. You can request a
-correction at the address below.
+in the Official Gazette. For positions at deputy director general level and above (such as
+heads of institutions, rectors, governors and ambassadors), and for deputy governors and
+provincial directors, if a decision does not name the
+previous holder, the previous holder is researched in the Official Gazette archive or in public
+sources such as official institutional websites and news agencies; the source link is then shown
+next to the name. No information other than the official position (ID numbers, contact details,
+etc.) is added about these persons. The decision published in the Official Gazette is
+authoritative. You can request a correction at the address below.
 
 ### Permissions and device features
 
