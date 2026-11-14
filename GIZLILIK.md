@@ -46,7 +46,7 @@ gönderilmez ve uygulamayı kaldırdığınızda silinir:
 
 - İndirilen günlük özetler ve arama dizini,
 - "Kaydet" ile işaretlediğiniz maddeler,
-- Tema tercihiniz (Açık / Koyu / Sistem) ve sesli okuma hızı tercihiniz,
+- Tema (Açık / Koyu / Sistem), yazı boyutu ve sesli okuma hızı tercihleriniz,
 - Bildirim Radarı'na yazdığınız takip kelimeleri,
 - Geçmiş listesi için kullanılan teknik bilgiler (özetlerin tarihleri ve boyutları).
 
@@ -128,7 +128,7 @@ anywhere and are deleted when you uninstall the app:
 
 - Downloaded daily summaries and the search index,
 - Items you mark with "Kaydet" (save),
-- Your theme choice (Light / Dark / System) and text-to-speech speed,
+- Your theme (Light / Dark / System), text size and text-to-speech speed choices,
 - The keywords you enter in the "Bildirim Radarı" (notification radar),
 - Technical data used for the history list (dates and sizes of the summaries).
 

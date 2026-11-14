@@ -304,8 +304,10 @@ ilişkin yönetmelikler bu kapsamda değildir.
 Böyle bir maddede:
 
 1. Başlık paragrafından hemen sonra şu satırı ekle: `<p><b>Personel mevzuatı</b></p>`.
-   Uygulama bunu bir etikete çevirir, maddenin ayrıntılarını açık gösterir ve o gün için
-   özel bir bildirim gönderir. Kurum ve yürürlük satırı bunun altına gelir.
+   Uygulama bunu bir etikete çevirir ve o gün için özel bir bildirim gönderir; maddenin
+   ayrıntıları diğer maddelerdeki gibi "Ayrıntıları göster" düğmesinin arkasında kapalı gelir
+   (düğmede, ayrıntılarda karşılaştırma ya da sıkça sorulanlar olduğu yazar). Bu yüzden asıl
+   bilgiyi açıklama paragrafında ver. Kurum ve yürürlük satırı bunun altına gelir.
 2. Açıklama paragrafında düzenlemenin ne olduğunu, hangi kurumun hangi personelini
    kapsadığını ve yürürlük tarihini söyle.
 3. Geçici madde, intibak ya da kazanılmış haklara ilişkin hüküm varsa açıklama paragrafından
